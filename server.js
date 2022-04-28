@@ -29,14 +29,13 @@ function containWordCharsOnly(text) {
 }
 
 // Handle the /register endpoint
-// Not exactly signing in, this just requires users to enter their desired username
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username } = req.body;
+    const { username, password } = req.body;
     const users = JSON.parse(fs.readFileSync("./data/users.json"));
 
-    if (username === ""){
-        res.json({ status: "error", error: "Username cannot be empty"});
+    if (username === "" || password === ""){
+        res.json({ status: "error", error: "Username and password cannot be empty"});
         return;
     }
     if (!containWordCharsOnly(username)){
@@ -47,15 +46,49 @@ app.post("/register", (req, res) => {
         res.json({ status: "error", error: "Username already exists"});
         return;
     }
+
+    const hash = bcrypt.hashSync(password, 10);
     
     users[username] = {
-        lives: 3,
-        points: 0
+        password: hash,
+        highscore: 0
     };
 
     fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "))
     req.session.user = { username }
     res.json({ status: "success" });
+});
+
+// Handle the /signin endpoint
+app.post("/signin", (req, res) => {
+
+    const { username, password } = req.body;
+
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
+
+    if (username === ""){
+        res.json({ status: "error", error: "Please enter your username"});
+        return;
+    }
+    if (password === ""){
+        res.json({ status: "error", error: "Please enter your password"});
+        return;
+    }
+    if (!(username in users)){
+        res.json({ status: "error", error: "Username not in database"});
+        return;
+    }
+    const hashedPassword = users[username].password;
+    if (!bcrypt.compareSync(password, hashedPassword)){
+        res.json({ status: "error", error: "Password incorrect"});
+        return;
+    }
+    let highscore = users[username].highscore;
+    //
+    // G. Sending a success response with the user account
+    //
+    req.session.user = { username, highscore }
+    res.json({ status: "success", user: {username, highscore} });
 });
 
 // Handle the /signout endpoint
@@ -126,17 +159,34 @@ io.on("connection", (socket) => {
         if (players[newUser.username].lives == 0){
             alivePlayers -= 1;
             if ((alivePlayers == 1 && numPlayers > 1) || 
-                    (alivePlayers == 0 && numPlayers == 1))
+                    (alivePlayers == 0 && numPlayers == 1)){
+                
+                // Send player data (including lives + points) to webpage when game is over
+                const users = JSON.parse(fs.readFileSync("./data/users.json"));
+                
+                if (players[newUser.username].points > users[newUser.username].highscore){
+                    users[newUser.username].highscore = players[newUser.username].points;
+                    fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
+                }
+                
                 io.emit("game over", JSON.stringify(players));
+            }
             else
-                io.emit("player died", JSON.stringify(newUser));
+                socket.emit("player died", JSON.stringify(newUser));
         }
         else
             io.emit("update lives", JSON.stringify(players));
     })
     
-    socket.on("game over", () => {
+    socket.on("time up", () => {
         // Send player data (including lives + points) to webpage when game is over
+        const users = JSON.parse(fs.readFileSync("./data/users.json"));
+        
+        if (players[newUser.username].points > users[newUser.username].highscore){
+            users[newUser.username].highscore = players[newUser.username].points;
+            fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
+        }
+        
         io.emit("game over", JSON.stringify(players));
     })
 })

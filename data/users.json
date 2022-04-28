@@ -1,10 +1,10 @@
 {
     "tony": {
-        "lives": 3,
-        "points": 0
+        "password": "$2b$10$Yxb2fSgA5RFn9Oz9TxjLLuve/GiPXCs2DWVFhyFDr4qz39qglwp8e",
+        "highscore": 0
     },
     "may": {
-        "lives": 3,
-        "points": 0
+        "password": "$2b$10$gLc3Ri9W6P650EKKbexw6uvirV8Bar7gmvAtMcoMiPiR3rsY50GVu",
+        "highscore": 0
     }
 }
