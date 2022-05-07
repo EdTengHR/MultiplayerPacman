@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<title>Multi player Pacman</title>
+		<link rel="shortcut icon" type="image/png" href="img/favicon.ico"/>
+		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+		<script type="text/javascript" src="./js/config.js"></script>
+		<script src="./js/app.js"></script>
+		<script type="text/javascript" src="./js/pacman.js"></script>
+		<script type="text/javascript" src="./js/ghost.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+	</head>
+
+	<body>
+		<div id="gameArea">
+
+		</div>
+
+		<script id="intro-screen-template" type="text/template">
+			<div class="col-md-8 col-md-offset-4" id="initial-buttons">
+				<h2 class="title">Multi Player Pacman Game</h2>
+				<input type="button" value="Start" id="btnCreateGame" class="btn col-md-2">
+				<input type="button" value="Join" id="btnJoinGame" class="btn col-md-2">
+			</div>
+
+			<div class="col-md-8 col-md-offset-5" id="pacman-img">
+				<img src="./img/96px-Pacman.jpg" class="img-responsive">
+			</div>
+		</script>
+
+		<script id="create-game-template" type="text/template">
+			<div>
+				Game id: <span id="gameId"></span>
+				<span id="waiting"> Waiting for player </span>
+				<canvas id="canvas" class="canvas"></canvas>
+			</div>
+		</script>
+
+		<script id="join-game-template" type="text/template">
+			<div id="ghostGameArea">
+				<p>Enter Game id:</p>
+				<input type="text" id="inputGameId">
+				<input type="button" value="Start" id="btnStartGame">
+				<canvas id="canvas-ghost" class="canvas"></canvas>
+			</div>
+		</script>
+
+		<script id="game-over-template" type="text/template">
+			<div class="game-over"> GAME OVER!! </div>
+			<div><span id="winner"></span> wins!</div>
+		</script>
+
+		<script id="room-full-template" type="text/template">
+			<div id="roomFull">
+				<p>Sorry, requested game room is full.</p>
+				<p>Create or join a new game </p>
+			</div>
+		</script>
+	</body>
+</html>
