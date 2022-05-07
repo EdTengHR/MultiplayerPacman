@@ -140,6 +140,8 @@ io.on("connection", (socket) => {
         socket.emit("users", JSON.stringify(players))
     })
 
+    // This is questionable, might be better to take in user's input and store all the
+    // positions on the server side instead
     socket.on("update position", (x, y) => {
         const newPos = {
             user: newUser.username,
@@ -168,7 +170,7 @@ io.on("connection", (socket) => {
                     users[newUser.username].highscore = players[newUser.username].points;
                     fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
                 }
-                
+
                 io.emit("game over", JSON.stringify(players));
             }
             else
