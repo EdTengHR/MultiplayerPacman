@@ -117,7 +117,9 @@ io.on("connection", (socket) => {
     if (newUser != undefined){ 
         players[newUser.username] = {
             lives: 3,
-            points: 0
+            points: 0,
+            xPos: 0,
+            yPos: 0
         }
         numPlayers += 1;
         alivePlayers += 1;
@@ -136,13 +138,35 @@ io.on("connection", (socket) => {
     })
 
     socket.on("get users", () => {
-        // Send the online users back to the browser
+        // Send the data of current players back to the browser
         socket.emit("users", JSON.stringify(players))
     })
 
-    // This is questionable, might be better to take in user's input and store all the
-    // positions on the server side instead
-    socket.on("update position", (x, y) => {
+    // TODO - fix user positioning
+    // Could have a gameboard with -1 representing walls, 0 representing path with no
+    // points available, 1 representing path with a point
+    // This way, player position and scoring are handled in one step, without needing
+    // further socket communication
+    socket.on("update position", (keyCode) => {
+        switch(keyCode){
+            case 37:
+                // Left arrow key
+                
+                break;
+            case 38:
+                // Up arrow key
+                
+                break;
+            case 39:
+                // Right arrow key
+
+                break;
+            case 40:
+                // Down arrow key    
+
+                break;
+        }
+
         const newPos = {
             user: newUser.username,
             xPos: x,
