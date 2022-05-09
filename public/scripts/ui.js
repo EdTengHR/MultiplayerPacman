@@ -84,6 +84,9 @@ const UserPanel = (function() {
 
         // Click event for the signout button
         $("#signout-button").on("click", () => {
+            let username = Authentication.getUser().username
+            OnlineUsersPanel.removeUser(username)
+
             // Send a signout request
             Authentication.signout(
                 () => {
@@ -109,12 +112,16 @@ const UserPanel = (function() {
     // This function updates the user panel
     const update = function(user) {
         if (user) {
-            $("#user-panel .user-avatar").html(Avatar.getCode(user.avatar));
-            $("#user-panel .user-name").text(user.name);
+            $("#user-panel .user-welcome").text("Welcome");
+            $("#user-panel .user-name").html(user.username).css('font-weight', 'bold');
+            $("#user-panel .user-highscore-msg").text("Your highscore is:");
+            $("#user-panel .user-highscore").text(user.highscore);
         }
         else {
-            $("#user-panel .user-avatar").html("");
-            $("#user-panel .user-name").text("");
+            $("#user-panel .user-name").html("");
+            $("#user-panel .user-highscore").text("");
+            $("#user-panel .user-highscore-msg").text("");
+            $("#user-panel .user-highscore").text("");
         }
     };
 
@@ -126,40 +133,47 @@ const OnlineUsersPanel = (function() {
     const initialize = function() {};
 
     // This function updates the online users panel
-    const update = function(onlineUsers) {
+    const update = function(players) {
         const onlineUsersArea = $("#online-users-area");
-
-        // Clear the online users area
-        onlineUsersArea.empty();
 
 		// Get the current user
         const currentUser = Authentication.getUser();
+        console.log("Get current user successful, adding users one by one")
 
         // Add the user one-by-one
-        for (const username in onlineUsers) {
+        for (const username in players) {
             if (username != currentUser.username) {
-                onlineUsersArea.append(
-                    $("<div id='username-" + username + "'></div>")
-                        .append(UI.getUserDisplay(onlineUsers[username]))
-                );
+                const userDiv = onlineUsersArea.find("#username-" + username);
+
+                if (userDiv.length == 0){
+                    onlineUsersArea.append(
+                        $("<div id='username-" + username + "'></div>")
+                            .append(UI.getUserDisplay(username, players[username]))
+                    );
+                }
+                console.log("1 user added");
             }
         }
+        console.log("online user panel updated")
     };
 
     // This function adds a user in the panel
-	const addUser = function(user) {
+	const addUser = function(username, user) {
         const onlineUsersArea = $("#online-users-area");
 		
 		// Find the user
-		const userDiv = onlineUsersArea.find("#username-" + user.username);
+		const userDiv = onlineUsersArea.find("#username-" + username);
+
+        console.log("adding user: ", username)
 		
-		// Add the user
+		// Add the user only if the div does not exist
 		if (userDiv.length == 0) {
 			onlineUsersArea.append(
-				$("<div id='username-" + user.username + "'></div>")
-					.append(UI.getUserDisplay(user))
+				$("<div id='username-" + username + "'></div>")
+					.append(UI.getUserDisplay(username, user))
 			);
 		}
+        console.log("Add users complete")
 	};
 
     // This function removes a user from the panel
@@ -169,8 +183,12 @@ const OnlineUsersPanel = (function() {
 		// Find the user
 		const userDiv = onlineUsersArea.find("#username-" + user.username);
 		
+        let length = userDiv.length;
 		// Remove the user
-		if (userDiv.length > 0) userDiv.remove();
+		while (length > 0) {
+            userDiv.remove();
+            length--;
+        }
 	};
 
     return { initialize, update, addUser, removeUser };
@@ -207,7 +225,7 @@ const ChatPanel = (function() {
  	};
 
     // This function updates the chatroom area
-    const update = function(chatroom) {
+    const update = function(chatroom) { 
         // Clear the online users area
         chatArea.empty();
 
@@ -248,11 +266,13 @@ const ChatPanel = (function() {
 
 const UI = (function() {
     // This function gets the user display
-    const getUserDisplay = function(user) {
+    const getUserDisplay = function(username, user) {
+        console.log("user: ", user);
         return $("<div class='field-content row shadow'></div>")
-            .append($("<span class='user-avatar'>" +
-			        Avatar.getCode(user.avatar) + "</span>"))
-            .append($("<span class='user-name'>" + user.name + "</span>"));
+            .append($("<span class='user-username'>" + username + "</span>"))
+            .append($("<span class='user-highscore'>" + user.highscore + "</span>"))
+            .append($("<span class='user-lives'>" + user.lives + "</span>"))
+            .append($("<span class='user-points'>" + user.points + "</span>"));
     };
 
     // The components of the UI are put here

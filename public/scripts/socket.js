@@ -14,26 +14,23 @@ const Socket = (function() {
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
             // Get the online user list
+            console.log("socket emitting get users")
             socket.emit("get users");
-
-            // Get the chatroom messages
-            socket.emit("get messages");
         });
 
         // Set up the users event
-        socket.on("users", (onlineUsers) => {
-            onlineUsers = JSON.parse(onlineUsers);
+        socket.on("users", (players) => {
+            players = JSON.parse(players);
 
             // Show the online users
-            OnlineUsersPanel.update(onlineUsers);
+            OnlineUsersPanel.update(players);
         });
 
         // Set up the add user event
-        socket.on("add user", (user) => {
+        socket.on("add user", (username, user) => {
             user = JSON.parse(user);
-
             // Add the online user
-            OnlineUsersPanel.addUser(user);
+            OnlineUsersPanel.addUser(username, user);
         });
 
         // Set up the remove user event

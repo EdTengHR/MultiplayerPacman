@@ -84,11 +84,31 @@ app.post("/signin", (req, res) => {
         return;
     }
     let highscore = users[username].highscore;
+    let lives = 3;
+    let points = 0;
     //
     // G. Sending a success response with the user account
     //
     req.session.user = { username, highscore }
     res.json({ status: "success", user: {username, highscore} });
+});
+
+// Handle the /validate endpoint
+app.get("/validate", (req, res) => {
+
+    //
+    // B. Getting req.session.user
+    //
+    if (req.session.user === undefined){
+        res.json({ status: "error", error: "Not signed in"})
+        return;
+    }
+    let user = req.session.user;
+
+    //
+    // D. Sending a success response with the user account
+    //
+    res.json({ status: "success", user: user})
 });
 
 // Handle the /signout endpoint
@@ -118,13 +138,17 @@ io.on("connection", (socket) => {
         players[newUser.username] = {
             lives: 3,
             points: 0,
+            highscore: newUser.highscore,
             xPos: 0,
             yPos: 0
         }
         numPlayers += 1;
         alivePlayers += 1;
-        io.emit("add user", JSON.stringify(newUser));
-    }   
+        console.log("New connection")
+        console.log("Online users: ", players);
+        io.emit("add user", newUser.username, JSON.stringify(players[newUser.username]));
+        console.log("user added from server's io on connect");
+    }
 
     socket.on("disconnect", () => {
         // A user disconnects from the server
