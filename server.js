@@ -178,6 +178,7 @@ io.on("connection", (socket) => {
         console.log("Game created with id:" + GameId);
     })
 
+
     socket.on("p2 joined game", (data) => {
         let room = socket.adapter.rooms.get(data.gameId);
 

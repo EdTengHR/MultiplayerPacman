@@ -54,6 +54,7 @@ const Socket = (function() {
             var canvas = document.getElementById('p2-canvas')
             initPlayer2Screen(canvas);
         })
+        socket.on('pacmanMoved', pacmanMoved);
     };
 
     const createNewGame = function() {
