@@ -5,6 +5,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> -->
 </head>
 <body>
     <div id="container" class="col">
@@ -29,20 +30,8 @@
         </div>
 
         <div id="main-panel" class="row">
-            <div id="chat-panel" class="col">
-                <div id="chat-area" class="col"></div>
-                <div id="user-typing" 
-                    style="display: flex;
-                        gap: 10px;
-                        color: darkgrey; 
-                        font-style: italic; 
-                        justify-content: initial; 
-                        align-items: left;
-                        flex-direction: column;">
-                </div>
-                <form id="chat-input-form" autocomplete="off">
-                    <input id="chat-input" placeholder="Enter your message"></input>
-                </form>
+            <div id="game-panel" class="col">
+                
             </div>
 
             <div id="online-users-panel" class="col">
@@ -106,12 +95,55 @@
                 SignInForm.hide();
                 UserPanel.update(Authentication.getUser());
                 UserPanel.show();
+                GamePanel.initialize();
 
                 Socket.connect();
             },
             () => { SignInForm.show(); }
         );
     });
+    </script>
+
+    <script id="lobby-template" type="text/template">
+        <div class="col-md-8 col-md-offset-4" id="initial-buttons">
+            <input type="button" value="Start" id="btnCreateGame" class="btn col-md-2">
+            <input type="button" value="Join" id="btnJoinGame" class="btn col-md-2">
+        </div>
+
+        <div class="col-md-8 col-md-offset-5" id="pacman-img">
+            <img src="./img/96px-Pacman.jpg" class="img-responsive">
+        </div>
+    </script>
+
+    <script id="create-game-template" type="text/template">
+        <div class="col">
+            <div>
+                Game id: <span id="gameId"></span>
+                <p id="waiting"> Waiting for player2... </p>
+            </div>
+            <canvas id="game-canvas" width="400px" height="400px"></canvas>
+        </div>
+    </script>
+
+    <script id="join-game-template" type="text/template">
+        <div id="p2-game-panel">
+            <p>Enter Game id:</p>
+            <input type="text" id="inputGameId">
+            <input type="button" value="Start" id="btnStartGame">
+            <canvas id="canvas-ghost" class="canvas"></canvas>
+        </div>
+    </script>
+
+    <script id="game-over-template" type="text/template">
+        <div class="game-over"> GAME OVER!! </div>
+        <div><span id="winner"></span> wins!</div>
+    </script>
+
+    <script id="room-full-template" type="text/template">
+        <div id="roomFull">
+            <p>Sorry, requested game room is full.</p>
+            <p>Create or join a new game </p>
+        </div>
     </script>
 </body>
 </html>

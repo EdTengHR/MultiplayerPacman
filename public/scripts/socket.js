@@ -14,7 +14,6 @@ const Socket = (function() {
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
             // Get the online user list
-            console.log("socket emitting get users")
             socket.emit("get users");
         });
 
@@ -41,27 +40,27 @@ const Socket = (function() {
             OnlineUsersPanel.removeUser(user);
         });
 
-        // Set up the messages event
-        socket.on("messages", (chatroom) => {
-            chatroom = JSON.parse(chatroom);
-
-            // Show the chatroom messages
-            ChatPanel.update(chatroom);
-        });
-
-        // Set up the add message event
-        socket.on("add message", (message) => {
-            message = JSON.parse(message);
-
-            // Add the message to the chatroom
-            ChatPanel.addMessage(message);
-        });
-
-        socket.on("add user typing", (text) => {
-            text = JSON.parse(text);
-            ChatPanel.addUserTyping(text);
+        socket.on("new game created", (data) => {
+            GamePanel.initGame(data);
         })
     };
+
+    const createNewGame = function() {
+        if (socket && socket.connected) {
+            console.log("emitting create game")
+            socket.emit("create game");
+        }
+    }
+
+    const startGame = function(){
+        if (socket && socket.connected) {
+            let data = {
+                gameId: $('#inputGameId').val()
+            }
+            console.log("emitting p2 joined game")
+            socket.emit('p2 joined game', data);
+        }
+    }
 
     // This function disconnects the socket from the server
     const disconnect = function() {
@@ -83,5 +82,5 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, disconnect, postMessage, userTyping };
+    return { getSocket, connect, createNewGame, startGame, disconnect, postMessage, userTyping };
 })();

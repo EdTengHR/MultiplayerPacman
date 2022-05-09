@@ -51,7 +51,7 @@ const Authentication = (function() {
                 else if (onError) onError(json.error);
             })
             .catch((err) => {
-                console.log("Error!")
+                console.log(err);
             })
     };
 

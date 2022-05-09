@@ -129,14 +129,14 @@ io.use((socket, next) => {
 
 // Current players in the lobby
 const players = {};
-let numPlayers = 0;
+let numPlayers = 0;     // This value is edited later on when p2 joins a room
 let alivePlayers = 0;
 
 io.on("connection", (socket) => {
     const newUser = socket.request.session.user
     if (newUser != undefined){ 
         players[newUser.username] = {
-            lives: 3,
+            lives: 1,
             points: 0,
             highscore: newUser.highscore,
             xPos: 0,
@@ -164,6 +164,35 @@ io.on("connection", (socket) => {
     socket.on("get users", () => {
         // Send the data of current players back to the browser
         socket.emit("users", JSON.stringify(players))
+    })
+
+    socket.on("create game", () => {
+        let GameId = ( Math.random() * 100000 ) | 0;
+        let data = {
+            gameId: GameId
+        }
+        socket.emit("new game created", data);
+        console.log("Emitted create new game with data:", data)
+        socket.join(GameId.toString());
+        console.log("Game created with id:" + GameId);
+    })
+
+    socket.on("p2 joined game", (data) => {
+        let room = socket.adapter.rooms[data.gameId];
+
+        console.log("P2 joined room:" + room)
+        if(room != undefined){
+            numPlayers = Object.keys(room).length
+            if(numPlayers == 2){
+                this.emit('notifyRoomFull', {})
+            }
+            else{
+                io.sockets.in(data.gameId).emit('ghostJoinedRoom', data)
+                this.join(data.gameId)
+                this.gameId = data.gameId;
+                this.emit('initGhostScreen', data)
+            }
+        }
     })
 
     // TODO - fix user positioning

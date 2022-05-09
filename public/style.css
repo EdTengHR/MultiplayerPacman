@@ -12,7 +12,7 @@
     --header-background: linear-gradient(to right, #eb4a40, #f59e72);
     --main-panel-background: linear-gradient(white, #fde0c5);
     --online-users-panel-background: linear-gradient(to right, #fde0c5, #facba6);
-    --chat-panel-background: none;
+    --game-panel-background: none;
 
     --title-color: white;
     --caption-color: white;
@@ -191,14 +191,20 @@ button.icon:active {
     background: var(--main-panel-background);
 }
 
-/* Chat area */
-#chat-panel {
+/* Game area */
+#game-panel {
     flex-grow: 1;
     align-items: stretch;
     height: 100%;
-    background: var(--chat-panel-background);
+    background: var(--game-panel-background);
     padding: 0;
 }
+
+#game-canvas{
+	border: 1px solid black;
+	background-color: #000000;
+}
+
 #chat-area {
     height: 100%;
     align-items: flex-start;

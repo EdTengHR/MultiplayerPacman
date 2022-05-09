@@ -24,6 +24,7 @@ const SignInForm = (function() {
                     hide();
                     UserPanel.update(Authentication.getUser());
                     UserPanel.show();
+                    GamePanel.initialize();
 
                     Socket.connect();
                 },
@@ -194,74 +195,45 @@ const OnlineUsersPanel = (function() {
     return { initialize, update, addUser, removeUser };
 })();
 
-const ChatPanel = (function() {
+const GamePanel = (function() {
 	// This stores the chat area
-    let chatArea = null;
+    let gamePanel = null;
 
     // This function initializes the UI
     const initialize = function() {
 		// Set up the chat area
-		chatArea = $("#chat-area");
+		gamePanel = $("#game-panel");
 
-        // Submit event for the input form
-        $("#chat-input-form").on("submit", (e) => {
-            // Do not submit the form
-            e.preventDefault();
+        gamePanel.html($("#lobby-template").html());
 
-            // Get the message content
-            const content = $("#chat-input").val().trim();
-
-            // Post it
-            Socket.postMessage(content);
-
-			// Clear the message
-            $("#chat-input").val("");
+        $("#btnCreateGame").on('click', () => {
+            console.log("create game button clicked")
+            Socket.createNewGame();
         });
 
-        // Keydown event for the input form (for the 'typing' message)
-        $("#chat-input-form").on("keydown", () => {
-            Socket.userTyping();
+		// Player 2's events
+        // When p2 presses join game button, set their gamepanel's html to the join game template
+		$("#btnJoinGame").on('click', () => {
+            console.log("join game button clicked")
+            gamePanel.html($("#join-game-template").html())
+        });
+		$("#btnStartGame").on('click', () => {
+            console.log("start game button clicked")
+            Socket.startGame()
         });
  	};
 
-    // This function updates the chatroom area
-    const update = function(chatroom) { 
-        // Clear the online users area
-        chatArea.empty();
-
-        // Add the chat message one-by-one
-        for (const message of chatroom) {
-			addMessage(message);
-        }
-    };
-
-    // This function adds a new message at the end of the chatroom
-    const addMessage = function(message) {
-		const datetime = new Date(message.datetime);
-		const datetimeString = datetime.toLocaleDateString() + " " +
-							   datetime.toLocaleTimeString();
-
-		chatArea.append(
-			$("<div class='chat-message-panel row'></div>")
-				.append(UI.getUserDisplay(message.user))
-				.append($("<div class='chat-message col'></div>")
-					.append($("<div class='chat-date'>" + datetimeString + "</div>"))
-					.append($("<div class='chat-content'>" + message.content + "</div>"))
-				)
-		);
-		chatArea.scrollTop(chatArea[0].scrollHeight);
-    };
-
-    // This function adds the "user typing" text above the chat box
-    const addUserTyping = function(text) {
-        clearTimeout(typingTimeout);
-        $("#user-typing").text(text);
-        typingTimeout = setTimeout(() => {
-            $("#user-typing").empty();
-        }, 2000);
+    const initGame = function(data) {
+        gamePanel.html($("#create-game-template").html());
+		$('#gameId').html(data.gameId)
     }
 
-    return { initialize, update, addMessage, addUserTyping };
+    
+    const update = function(data) { 
+        
+    };
+
+    return { initialize, initGame, update };
 })();
 
 const UI = (function() {
@@ -279,7 +251,7 @@ const UI = (function() {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, OnlineUsersPanel, ChatPanel];
+    const components = [SignInForm, UserPanel, OnlineUsersPanel];
 
     // This function initializes the UI
     const initialize = function() {
