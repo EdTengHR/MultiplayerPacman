@@ -83,9 +83,9 @@ const UserPanel = (function() {
         $("#user-panel").hide();
 
         // Click event for the signout button
-        $("#signout-button").on("click", () => {
-            let username = Authentication.getUser().username
-            OnlineUsersPanel.removeUser(username)
+        $("#signout-button").on("click", () => {            
+            // Remove all online users
+            $("#online-users-area").empty();
 
             // Send a signout request
             Authentication.signout(
