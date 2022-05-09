@@ -131,6 +131,7 @@ io.use((socket, next) => {
 const players = {};
 let numPlayers = 0;     // This value is edited later on when p2 joins a room
 let alivePlayers = 0;
+let gameId = 0;
 
 io.on("connection", (socket) => {
     const newUser = socket.request.session.user
@@ -178,19 +179,25 @@ io.on("connection", (socket) => {
     })
 
     socket.on("p2 joined game", (data) => {
-        let room = socket.adapter.rooms[data.gameId];
+        let room = socket.adapter.rooms.get(data.gameId);
+
+        console.log(socket.adapter.rooms)
+        console.log(data.gameId);
 
         console.log("P2 joined room:" + room)
         if(room != undefined){
             numPlayers = Object.keys(room).length
             if(numPlayers == 2){
-                this.emit('notifyRoomFull', {})
+                socket.emit('notifyRoomFull', {})
             }
             else{
-                io.sockets.in(data.gameId).emit('ghostJoinedRoom', data)
-                this.join(data.gameId)
-                this.gameId = data.gameId;
-                this.emit('initGhostScreen', data)
+                // Broadcast for player 1 to initialize canvas
+                io.sockets.in(data.gameId).emit('p2 joined room', data)
+                socket.join(data.gameId)
+                gameId = data.gameId;
+
+                // Broadcast for player 2 to initialize canvas
+                socket.emit('init p2 canvas', data)
             }
         }
     })

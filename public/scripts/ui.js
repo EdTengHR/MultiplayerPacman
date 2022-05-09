@@ -217,6 +217,7 @@ const GamePanel = (function() {
             console.log("join game button clicked")
             gamePanel.html($("#join-game-template").html())
         });
+        
 		$("#btnStartGame").on('click', () => {
             console.log("start game button clicked")
             Socket.startGame()

@@ -43,6 +43,17 @@ const Socket = (function() {
         socket.on("new game created", (data) => {
             GamePanel.initGame(data);
         })
+
+        socket.on("p2 joined room", (data) => {
+            $('#waiting').html('Player joined!')
+            let canvas = document.getElementById('p1-canvas')
+			initPlayer1Screen(canvas);
+        })
+
+        socket.on("init p2 canvas", (data) => {
+            var canvas = document.getElementById('p2-canvas')
+            initPlayer2Screen(canvas);
+        })
     };
 
     const createNewGame = function() {
