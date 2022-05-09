@@ -61,6 +61,8 @@ body {
 .spacer-0 { width: 0; height: 0; }
 .spacer-1 { width: 5px; height: 5px; }
 .spacer-2 { width: 10px; height: 10px; }
+.spacer-3 { width: 15px; height: 15px; }
+.spacer-4 { width: 20px; height: 20px; }
 .spacer-grow { flex-grow: 1; }
 
 /* Overlay */

@@ -270,9 +270,12 @@ const UI = (function() {
         console.log("user: ", user);
         return $("<div class='field-content row shadow'></div>")
             .append($("<span class='user-username'>" + username + "</span>"))
-            .append($("<span class='user-highscore'>" + user.highscore + "</span>"))
+            .append($("<div class='spacer-2'>" + "</div>"))
+            .append($("<span class='user-points'>" + user.points + "</span>"))
+            .append($("<div class='spacer-3'>" + "</div>"))
             .append($("<span class='user-lives'>" + user.lives + "</span>"))
-            .append($("<span class='user-points'>" + user.points + "</span>"));
+            .append($("<div class='spacer-4'>" + "</div>"))
+            .append($("<span class='user-highscore'>" + user.highscore + "</span>"));         
     };
 
     // The components of the UI are put here
