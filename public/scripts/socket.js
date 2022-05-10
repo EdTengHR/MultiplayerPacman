@@ -44,14 +44,19 @@ const Socket = (function() {
         })
 
         // Player 2 joins the room event
-        socket.on("p2 joined room", (data) => {
-            $('#waiting').html('Player joined!')
+        socket.on("p2 joined room", (newPlayer) => {
+            $('#waiting').html(`Player 2 (${newPlayer}) joined!`)
+
+            // Assign player1's specific canvas and initialize it
             let canvas = document.getElementById('p1-canvas')
 			initPlayer1Screen(canvas);
         })
 
         // Set up player 2's canvas
-        socket.on("init p2 canvas", (data) => {
+        socket.on("init p2 canvas", (host) => {
+            $('#hostPlayer').html(`You have joined ${host}'s game!`)
+
+            // Assign player2's specific canvas and intiailize it
             var canvas = document.getElementById('p2-canvas')
             initPlayer2Screen(canvas);
         })
@@ -64,7 +69,15 @@ const Socket = (function() {
 		    $('#winner').html(winner)
         })
 
-        socket.on('pacmanMoved', pacmanMoved);
+        // P2 needs to update p1's position on p2's canvas
+        socket.on("update p1", (data) => {
+            updatePlayer1ForPlayer2(data);
+        });
+
+        // P1 needs to update p2's position on p1's canvas
+        socket.on("update p2", (data) => {
+            updateP2InP1Screen(data);
+        });
     };
 
     const createNewGame = function() {
@@ -77,19 +90,19 @@ const Socket = (function() {
     const startGame = function(){
         if (socket && socket.connected) {
             let data = {
-                gameId: $('#inputGameId').val()
+                gameId: $('#inputGameId').val(),
             }
-            console.log("emitting p2 joined game")
+            console.log("emitting p2 joined game", data)
             socket.emit('p2 joined game', data);
         }
     }
 
-    const p1Moved = function() {
-
+    const p1Moved = function(state, keycode, direction) {
+        socket.emit("p1 moved", {X: state.X, Y: state.Y, keyCode: keycode, direction: direction})
     }
 
-    const p2Moved = function() {
-        
+    const p2Moved = function(state, keycode, direction) {
+        socket.emit('p2 moved', {X: state.X, Y: state.Y, keyCode: keycode, direction: direction})
     }
 
     // This function disconnects the socket from the server

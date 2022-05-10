@@ -132,6 +132,7 @@ const players = {};
 let numPlayers = 0;     // This value is edited later on when p2 joins a room
 let alivePlayers = 0;
 let gameId = 0;
+let host = null;
 
 io.on("connection", (socket) => {
     const newUser = socket.request.session.user
@@ -140,8 +141,6 @@ io.on("connection", (socket) => {
             lives: 1,
             points: 0,
             highscore: newUser.highscore,
-            xPos: 0,
-            yPos: 0
         }
         numPlayers += 1;
         alivePlayers += 1;
@@ -172,6 +171,7 @@ io.on("connection", (socket) => {
         let data = {
             gameId: GameId
         }
+        host = newUser.username
         socket.emit("new game created", data);
         console.log("Emitted create new game with data:", data)
         socket.join(GameId.toString());
@@ -182,10 +182,9 @@ io.on("connection", (socket) => {
     socket.on("p2 joined game", (data) => {
         let room = socket.adapter.rooms.get(data.gameId);
 
-        console.log(socket.adapter.rooms)
-        console.log(data.gameId);
+        console.log(data);
+        console.log("Player 2: ", newUser.username, " has joined the game!")
 
-        console.log("P2 joined room:" + room)
         if(room != undefined){
             numPlayers = Object.keys(room).length
             if(numPlayers == 2){
@@ -193,47 +192,23 @@ io.on("connection", (socket) => {
             }
             else{
                 // Broadcast for player 1 to initialize canvas
-                io.sockets.in(data.gameId).emit('p2 joined room', data)
+                io.sockets.in(data.gameId).emit('p2 joined room', newUser.username)
                 socket.join(data.gameId)
                 gameId = data.gameId;
 
                 // Broadcast for player 2 to initialize canvas
-                socket.emit('init p2 canvas', data)
+                socket.emit('init p2 canvas', host)
             }
         }
     })
 
-    // TODO - fix user positioning
-    // Could have a gameboard with -1 representing walls, 0 representing path with no
-    // points available, 1 representing path with a point
-    // This way, player position and scoring are handled in one step, without needing
-    // further socket communication
-    socket.on("update position", (keyCode) => {
-        switch(keyCode){
-            case 37:
-                // Left arrow key
-                
-                break;
-            case 38:
-                // Up arrow key
-                
-                break;
-            case 39:
-                // Right arrow key
+    // player movement broadcasts here
+    socket.on("p1 moved", (data) => {
+        socket.broadcast.to(gameId).emit('update p1', data);
+    })
 
-                break;
-            case 40:
-                // Down arrow key    
-
-                break;
-        }
-
-        const newPos = {
-            user: newUser.username,
-            xPos: x,
-            yPos: y
-        }
-        io.emit("update player positions", JSON.stringify(newPos));
+    socket.on("p2 moved", (data) => {
+        socket.broadcast.to(gameId).emit('update p2', data);
     })
 
     socket.on("player scores", () => {
