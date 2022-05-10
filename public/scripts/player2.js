@@ -70,8 +70,10 @@ function updateP1PositionInP2Screen(data){
 }
 
 function drawP2(ctx, player2State){
-	ctx.fillStyle = '#D0342B'
+	//ctx.fillStyle = '#D0342B'
+	ctx.fillStyle = '#FF0000'
 	
+
 	// Draw player 2 here
 	ctx.arc(player2State.X, player2State.Y, 20, 0, 2*Math.PI, false);
 	ctx.fill();

@@ -45,7 +45,11 @@ const Socket = (function() {
 
         // Player 2 joins the room event
         socket.on("p2 joined room", (newPlayer) => {
-            $('#waiting').html(`Player 2 (${newPlayer}) joined!`)
+            p = document.createElement("p");
+            p.style.color = 'rgb(22, 218, 55)';
+            p.style.fontSize = 'large';
+            p.innerHTML = `Player 2 ${newPlayer} joined!`;
+            $('#waiting').html(p)
 
             // Assign player1's specific canvas and initialize it
             let canvas = document.getElementById('p1-canvas')
@@ -54,8 +58,15 @@ const Socket = (function() {
 
         // Set up player 2's canvas
         socket.on("init p2 canvas", (host) => {
-            $('#hostPlayer').html(`You have joined ${host}'s game!`)
-
+            p = document.createElement("p");
+            p.style.color = 'rgb(22, 218, 55)';
+            p.style.fontSize = 'large';
+            p.innerHTML = `You have joined ${host}'s game!`;
+            $('#hostPlayer').html(p);
+            var x = document.getElementById("p2-button-text-p");
+            x.style.display = 'none';
+            var y = document.getElementById("p2-buttons");
+            y.style.display = 'none';
             // Assign player2's specific canvas and intiailize it
             var canvas = document.getElementById('p2-canvas')
             initPlayer2Screen(canvas);

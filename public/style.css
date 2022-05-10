@@ -175,10 +175,12 @@ button.icon:active {
     text-transform: uppercase;
     color: var(--title-color);
     user-select: none;
+    margin: 10px;
 }
 #title .material-icons {
     color: var(--title-color);
     font-size: 36px;
+    margin: 10px;
 }
 #user-panel {
     padding: 0;
@@ -189,19 +191,23 @@ button.icon:active {
 
 /* Main panel */
 #main-panel {
-    height: calc(100% - 80px);
+    height: calc(100% - 40px);
     background: var(--main-panel-background);
 }
 
 /* Game area */
 #game-panel {
     flex-grow: 1;
-    align-items: stretch;
+    align-items: center;
     height: 100%;
     padding: 0;
-
+    
 }
-
+#p2-canvas, #p1-canvas{
+    background-color: #000000;
+    width: 760px;
+    height: 440px;
+}
 #game-canvas{
 	border: 1px solid rgb(0, 0, 0);
 	background-color: #000000;
@@ -228,11 +234,33 @@ button.icon:active {
     font-size: 75%;
     color: var(--date-color);
 }
-#initial-buttons, #pacman-img{
+#initial-buttons{
+    display: flex;
+    justify-content: center;
+
+}
+#inputGameId, #btnStartGame, #btnJoinGame, #btnCreateGame{
+    margin: 10px;
+}
+#pacman-img{
     display: flex;
     justify-content: center;
 }
-
+#hostPlayerDiv, #p2-button-text,#p2-buttons{
+    display: flex;
+    justify-content: center;
+    margin: 0%;
+}
+#p2-button-text{
+    font-size: large;
+}
+#hostPlayerDiv, #p2-button-text-p{
+    color:rgb(22, 218, 55);
+}
+#waiting,#gameID,#gameIDp{
+    color:rgb(22, 218, 55);
+    font-size: large;
+}
 /* Online users panel */
 #online-users-panel {
 	flex: 0 0 250px;
