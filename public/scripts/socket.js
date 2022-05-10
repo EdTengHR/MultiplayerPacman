@@ -44,14 +44,19 @@ const Socket = (function() {
         })
 
         // Player 2 joins the room event
-        socket.on("p2 joined room", (data) => {
-            $('#waiting').html('Player joined!')
+        socket.on("p2 joined room", (newPlayer) => {
+            $('#waiting').html(`Player 2 (${newPlayer}) joined!`)
+
+            // Assign player1's specific canvas and initialize it
             let canvas = document.getElementById('p1-canvas')
 			initPlayer1Screen(canvas);
         })
 
         // Set up player 2's canvas
-        socket.on("init p2 canvas", (data) => {
+        socket.on("init p2 canvas", (host) => {
+            $('#hostPlayer').html(`You have joined ${host}'s game!`)
+
+            // Assign player2's specific canvas and intiailize it
             var canvas = document.getElementById('p2-canvas')
             initPlayer2Screen(canvas);
         })
@@ -85,9 +90,9 @@ const Socket = (function() {
     const startGame = function(){
         if (socket && socket.connected) {
             let data = {
-                gameId: $('#inputGameId').val()
+                gameId: $('#inputGameId').val(),
             }
-            console.log("emitting p2 joined game")
+            console.log("emitting p2 joined game", data)
             socket.emit('p2 joined game', data);
         }
     }

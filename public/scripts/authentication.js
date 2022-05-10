@@ -15,18 +15,11 @@ const Authentication = (function() {
     // * `onError`   - This is a callback function to be called when the
     //                 request fails in this form `onError(error)`
     const signin = function(username, password, onSuccess, onError) {
-
-        //
-        // A. Preparing the user data
-        //
         const data = {
             username: username,
             password: password
         }
  
-        //
-        // B. Sending the AJAX request to the server
-        //
         fetch("/signin", {
             method: "POST",
             headers: {
@@ -35,14 +28,6 @@ const Authentication = (function() {
             body: JSON.stringify(data)
         })
             .then((res) => res.json())
-
-        //
-        // F. Processing any error returned by the server
-        //
-
-        //
-        // H. Handling the success response from the server
-        //
             .then((json) => {
                 if (json.status == "success"){
                     user = json.user;
@@ -61,20 +46,8 @@ const Authentication = (function() {
     // * `onError`   - This is a callback function to be called when the
     //                 request fails in this form `onError(error)`
     const validate = function(onSuccess, onError) {
-
-        //
-        // A. Sending the AJAX request to the server
-        //
         fetch("/validate")
             .then((res) => res.json())
-
-        //
-        // C. Processing any error returned by the server
-        //
-
-        //
-        // E. Handling the success response from the server
-        //
             .then((json) => {
                 if (json.status == "success"){
                     user = json.user;
@@ -85,7 +58,6 @@ const Authentication = (function() {
             .catch ((err) => {
                 console.log(err)
             })
-
     };
 
     // This function sends a sign-out request to the server

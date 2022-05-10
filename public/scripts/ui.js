@@ -200,7 +200,6 @@ const GamePanel = (function() {
 
     const initialize = function() {
 		gamePanel = $("#game-panel");
-
         gamePanel.html($("#lobby-template").html());
 
         $("#btnCreateGame").on('click', () => {
