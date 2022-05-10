@@ -209,13 +209,16 @@ function eatDots(state, isVertical, diff, isPlayer1){
 		pointValue = 1;
 
 		// Add game sound for scoring point here
-
+		let mySound = new Audio('./sound/munch-sound.wav');
+		mySound.play();
+		console.log("pill eaten;")
 		if (isPlayer1)
 			Socket.scoredPoint(pointValue);
 		
 		if(state.points == Object.keys(state.dots).length){
 			// Add game over sound here
-
+			let mySound = new Audio('./sound/endgame-sound.wav');
+			mySound.play();
 			Socket.gameOver('Player1');
 		}
 	}
