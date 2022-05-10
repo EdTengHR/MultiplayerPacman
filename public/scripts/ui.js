@@ -3,10 +3,7 @@ let typingTimeout = null;
 const SignInForm = (function() {
     // This function initializes the UI
     const initialize = function() {
-        // Populate the avatar selection
-
-        
-        // Hide it
+        // Hide signin overlay
         $("#signin-overlay").hide();
 
         // Submit event for the signin form
@@ -248,16 +245,7 @@ const GamePanel = (function() {
 		$('#gameId').html(p);
     }
 
-    const restartGame = function(data) {
-        Socket.leave(data.gameId);
-        $("#game-panel").html($("#lobby-template").html());
-    }
-    
-    const update = function(data) { 
-        
-    };
-
-    return { initialize, initGame, restartGame, update };
+    return { initialize, initGame };
 })();
 
 const UI = (function() {

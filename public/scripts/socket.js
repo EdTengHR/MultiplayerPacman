@@ -1,6 +1,7 @@
 const Socket = (function() {
     // This stores the current Socket.IO socket
     let socket = null;
+    let gameId = 0;
 
     // This function gets the socket from the module
     const getSocket = function() {
@@ -72,8 +73,6 @@ const Socket = (function() {
             initPlayer2Screen(canvas);
         })
 
-
-
         // Show the gameover screen and the winner
         socket.on("show gameover screen", (winner, players) => {
             $("#game-panel").html($("#game-over-template").html())
@@ -106,8 +105,9 @@ const Socket = (function() {
 
     const startGame = function(){
         if (socket && socket.connected) {
+            gameId = $('#inputGameId').val()
             let data = {
-                gameId: $('#inputGameId').val(),
+                gameId: gameId,
             }
             console.log("emitting p2 joined game", data)
             socket.emit('p2 joined game', data);
@@ -130,6 +130,11 @@ const Socket = (function() {
         socket.emit("gameover", winner);
     }
 
+    const restartGame = function() {
+        socket.leave(gameId);
+        $("#game-panel").html($("#lobby-template").html());
+    }
+
     // This function disconnects the socket from the server
     const disconnect = function() {
         socket.disconnect();
@@ -150,5 +155,5 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, disconnect, postMessage, userTyping };
+    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, restartGame, disconnect, postMessage, userTyping };
 })();

@@ -53,12 +53,7 @@
                     <span>Highscore</span>
                 </div>
                 <div id="online-users-area" class="col"></div>
-                <button id = "restart-game-btn">Restart Game</button>
-                <script>
-                    $("#restart-game-btn").on('click', () => {
-                    $("#game-panel").html($("#lobby-template").html());
-                });
-                </script>
+                <button id = "restart-game-btn" onclick="Socket.restartGame()">Restart Game</button>
             </div>
         </div>
     </div>
