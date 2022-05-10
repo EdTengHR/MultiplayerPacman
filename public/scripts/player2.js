@@ -56,7 +56,6 @@ function updateP1PositionInP2Screen(data){
 	player1State.X = data.X
 	player1State.Y = data.Y
 	
-
 	var diff = data.direction == 'right' || data.direction == 'down' ? 2 : -2
 	if(data.direction == 'right' || data.direction == 'left'){
 		eatDots(player1State, false, diff)
