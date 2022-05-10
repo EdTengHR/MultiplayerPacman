@@ -50,14 +50,27 @@ function update(state, keyCode){
 	return state;
 }
 
+// Update a player's position variables, send socket messages depending on situation - change isPacman
 function updatePlayerPosition(state, keyCode, direction, isPacman){
+
+	// Find the differential in x or y
+	// If player is heading in positive xy directions, set diff to 2, o.w. set diff to -2
 	var diff = direction == 'right' || direction == 'down' ? 2 : -2
+
+	// Check if direction is along x axis, then check y axis
 	if(direction == 'right' || direction == 'left'){
+
+		// Check if the move is allowed and adjust positions accordingly.
+		// Since direction is along x axis, have to check wall positions at X axis, and adjust according to Y axis
 		if(moveAllowed(state, 'X', 'Y', direction)){
 			state.X += diff
+
+			// Update the player's direction based on the keycode input
 			state = updatePlayerDirection(state, keyCode, direction);
 			if(isPacman){
 				eatDots(state, false, diff)
+
+				// Send keycode input information to server to update positions
 				Socket.p1Moved(state, keyCode, direction);
 			}
 			else{
@@ -81,18 +94,22 @@ function updatePlayerPosition(state, keyCode, direction, isPacman){
 	return state;
 }
 
+// Update a player's direction variables
 function updatePlayerDirection(state, keyCode, direction){
 	state.lastPressedKey = keyCode
 	state.direction = direction
 	return state
 }
 
+// Draw the game, including its borders and dots
 function draw(ctx, state){
 	drawBorder(ctx, state);
 	drawDots(ctx, state);
 	drawPacman(ctx, state);
 }
 
+// Draw borders based on the grid lines provided in the game config file
+// This is also where the dot positions in the game are stored
 function drawBorder(ctx, state){
 	for(var i=0; i<config.GRID.length-1; i++){
 		for(var j=0; j<config.GRID[i].length-1; j++){
@@ -112,6 +129,7 @@ function drawBorder(ctx, state){
 	}
 }
 
+// Helper function to draw lines on canvas, used when drawing the borders
 function drawLine(ctx, xPosition, yPosition, isVertical){
 	ctx.strokeStyle = '#0033ff';
 	ctx.beginPath();
@@ -128,6 +146,7 @@ function drawLine(ctx, xPosition, yPosition, isVertical){
 	ctx.stroke();
 }
 
+// Helper function to store the postiion of dots in the game
 function storeDotPosition(state, i, j){
 	dotX = (j*config.BOX_WIDTH) + config.BOX_WIDTH/2
 	dotY = (i*config.BOX_WIDTH) + config.BOX_WIDTH/2
@@ -180,10 +199,11 @@ function eatDots(state, isVertical, diff){
 		key.eaten = true
 		state.noDotsEaten += 1
 		if(state.noDotsEaten == Object.keys(state.dots).length)
-			App.gameOver('Pacman');
+			GamePanel.gameOver('Player1');
 	}
 }
 
+// Runs collision detection to see if next move is allowed. Returns true if allowed
 function moveAllowed(state, wallPosition, adjustPosition, direction){
 	neighbors = getNeighbors(state, direction);
 
@@ -191,11 +211,13 @@ function moveAllowed(state, wallPosition, adjustPosition, direction){
 	if(!checkWall(neighbors, state[wallPosition], neighbors.diff))
 		return false
 
-	// Adjust pacman
+	// Adjust player
 	adjustPacman(neighbors, state, adjustPosition)
 	return true
 }
 
+// Get the neighboring grids based on current position and direction
+// Note down all diagonals in the direction, helps collision detection check later
 function getNeighbors(state, direction){
 	var xIndex = Math.floor(state.X/config.BOX_WIDTH);
 	var yIndex = Math.floor(state.Y/config.BOX_WIDTH);
@@ -204,37 +226,40 @@ function getNeighbors(state, direction){
 	switch(direction){
 		case 'right':
 			neighbors.diff = 1
-			neighbors.diagonal1 = config.GRID[yIndex + 1][xIndex + 1] //diagonal below
-			neighbors.diagonal1 = config.GRID[yIndex - 1][xIndex + 1] //diagonal above
+			neighbors.diagonal1 = config.GRID[yIndex + 1][xIndex + 1] // bottom right
+			neighbors.diagonal1 = config.GRID[yIndex - 1][xIndex + 1] // top right
 			break;
 		case 'left':
 			neighbors.diff = -1
-			neighbors.diagonal1 = config.GRID[yIndex + 1][xIndex - 1] //diagonal below
-			neighbors.diagonal2 = config.GRID[yIndex - 1][xIndex - 1] //diagonal above
+			neighbors.diagonal1 = config.GRID[yIndex + 1][xIndex - 1] // bottom left
+			neighbors.diagonal2 = config.GRID[yIndex - 1][xIndex - 1] // top left
 			break;
 		case 'down':
 			neighbors.diff = 1
-			neighbors.diagonal1 = config.GRID[yIndex + 1][xIndex - 1] //diagonal Left
-			neighbors.diagonal2 = config.GRID[yIndex + 1][xIndex + 1] //diagonal Right
+			neighbors.diagonal1 = config.GRID[yIndex + 1][xIndex - 1] // bottom left
+			neighbors.diagonal2 = config.GRID[yIndex + 1][xIndex + 1] // bottom right
 			break;
 		case 'up':
 			neighbors.diff = -1
-			neighbors.diagonal1 = config.GRID[yIndex - 1][xIndex - 1] //diagonal Left
-			neighbors.diagonal2 = config.GRID[yIndex - 1][xIndex + 1] //diagonal Right
+			neighbors.diagonal1 = config.GRID[yIndex - 1][xIndex - 1] // top left
+			neighbors.diagonal2 = config.GRID[yIndex - 1][xIndex + 1] // top right
 			break;
 	}
 
 	if(direction == 'right' || direction == 'left')
-		neighbors.nextBlock = config.GRID[yIndex][xIndex+neighbors.diff]	
+		neighbors.nextBlock = config.GRID[yIndex][xIndex+neighbors.diff]	// Immediate next neighbor along x axis
 	else
-		neighbors.nextBlock = config.GRID[yIndex+neighbors.diff][xIndex]	
+		neighbors.nextBlock = config.GRID[yIndex+neighbors.diff][xIndex]	// Immedate next neighbor along y axis
 
 	neighbors.currentBlock = config.GRID[yIndex][xIndex]
 	
 	return neighbors
 }
 
+// Collision detection - use current position's neighbors
+// Returns false when there is a wall and therefore we cannot continue
 function checkWall(neighbors, position, diff){
+	// When checking collision, scale the neighbor's diff by the player radius
 	if((neighbors.currentBlock != neighbors.nextBlock) && ((position + (diff * config.PACMAN.radius)) % config.BOX_WIDTH == 0)){
 		return false;
 	}
@@ -249,11 +274,11 @@ function adjustPacman(neighbors, state, position){
 	}
 }
 
-function updateGhostInPacmanScreen(data){
+function updateP2InP1Screen(data){
 	player2State.X = data.X
 	player2State.Y = data.Y
 	
-
+	// diff stored for f
 	var diff = data.direction == 'right' || data.direction == 'down' ? 2 : -2
 	if(data.direction == 'right' || data.direction == 'left'){
 		player2State = updatePlayerDirection(player2State, data.keyCode, data.direction);	

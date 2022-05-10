@@ -64,7 +64,15 @@ const Socket = (function() {
 		    $('#winner').html(winner)
         })
 
-        socket.on('pacmanMoved', pacmanMoved);
+        // P2 needs to update p1's position on p2's canvas
+        socket.on("update p1", (data) => {
+            updatePlayer1ForPlayer2(data);
+        });
+
+        // P1 needs to update p2's position on p1's canvas
+        socket.on("update p2", (data) => {
+            updateP2InP1Screen(data);
+        });
     };
 
     const createNewGame = function() {
@@ -84,12 +92,12 @@ const Socket = (function() {
         }
     }
 
-    const p1Moved = function() {
-
+    const p1Moved = function(state, keycode, direction) {
+        socket.emit("p1 moved", {X: state.X, Y: state.Y, keyCode: keycode, direction: direction})
     }
 
-    const p2Moved = function() {
-        
+    const p2Moved = function(state, keycode, direction) {
+        socket.emit('p2 moved', {X: state.X, Y: state.Y, keyCode: keycode, direction: direction})
     }
 
     // This function disconnects the socket from the server

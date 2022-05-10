@@ -34,7 +34,7 @@ initPlayer2Screen = function(canvas){
 	window.requestAnimationFrame(tickPlayer2Screen);
 	
 }
-
+ 
 function checkGameOver(player2State, player1State){
 	var xDiff = Math.abs(player2State.X - player1State.X)
 	var yDiff = Math.abs(player2State.Y - player1State.Y)
@@ -48,11 +48,11 @@ function updatePlayer2(player2State, keyCode){
 	return player2State;
 }
 
-function updatePacmanInGhostScreen(data){
-	player1State = updatePacmanPositionInGhostScreen(data)
+function updatePlayer1ForPlayer2(data){
+	player1State = updateP1PositionInP2Screen(data)
 }
 
-function updatePacmanPositionInGhostScreen(data){
+function updateP1PositionInP2Screen(data){
 	player1State.X = data.X
 	player1State.Y = data.Y
 	
@@ -71,7 +71,8 @@ function updatePacmanPositionInGhostScreen(data){
 
 function drawP2(ctx, player2State){
 	ctx.fillStyle = '#D0342B'
-	// Arc of ghost
+	
+	// Draw player 2 here
 	ctx.arc(player2State.X, player2State.Y, 20, 0, 2*Math.PI, false);
 	ctx.fill();
 }

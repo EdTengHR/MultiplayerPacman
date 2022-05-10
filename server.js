@@ -203,37 +203,13 @@ io.on("connection", (socket) => {
         }
     })
 
-    // TODO - fix user positioning
-    // Could have a gameboard with -1 representing walls, 0 representing path with no
-    // points available, 1 representing path with a point
-    // This way, player position and scoring are handled in one step, without needing
-    // further socket communication
-    socket.on("update position", (keyCode) => {
-        switch(keyCode){
-            case 37:
-                // Left arrow key
-                
-                break;
-            case 38:
-                // Up arrow key
-                
-                break;
-            case 39:
-                // Right arrow key
+    // player movement broadcasts here
+    socket.on("p1 moved", (data) => {
+        socket.broadcast.to(gameId).emit('update p1', data);
+    })
 
-                break;
-            case 40:
-                // Down arrow key    
-
-                break;
-        }
-
-        const newPos = {
-            user: newUser.username,
-            xPos: x,
-            yPos: y
-        }
-        io.emit("update player positions", JSON.stringify(newPos));
+    socket.on("p2 moved", (data) => {
+        socket.broadcast.to(gameId).emit('update p2', data);
     })
 
     socket.on("player scores", () => {
