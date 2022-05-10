@@ -188,6 +188,12 @@ button.icon:active {
 #signin-user {
     cursor: pointer;
 }
+#game-description-para{
+    color: antiquewhite;
+    font-size: large;
+    margin: 50px;
+    text-align: center;
+}
 
 /* Main panel */
 #main-panel {

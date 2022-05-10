@@ -135,7 +135,7 @@ function drawBorder(ctx, state){
 }
 
 // Helper function to draw lines on canvas, used when drawing the borders
-function drawLine(ctx, xPosition, yPosition, isVertical){
+function drawLine(ctx, x, y, isVertical){
 	//ctx.strokeStyle = '#0033ff';
 	ctx.strokeStyle='#F08080';
 	ctx.beginPath();
