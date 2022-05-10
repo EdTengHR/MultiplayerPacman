@@ -224,16 +224,12 @@ const GamePanel = (function() {
         gamePanel.html($("#create-game-template").html());
 		$('#gameId').html(data.gameId)
     }
-
-    const gameOver = function(winner) {
-        Socket.emit("gameover", winner);
-    }
     
     const update = function(data) { 
         
     };
 
-    return { initialize, initGame, gameOver, update };
+    return { initialize, initGame, update };
 })();
 
 const UI = (function() {

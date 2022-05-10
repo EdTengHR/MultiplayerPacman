@@ -9,7 +9,7 @@ initPlayer1Screen = function(canvas){
 		lastPressedKey: 37,
 		direction: 'left',
 		dots: [],
-		noDotsEaten: 0
+		points: 0
 	}
 
 	player2State = {
@@ -51,7 +51,7 @@ function update(state, keyCode){
 }
 
 // Update a player's position variables, send socket messages depending on situation - change isPacman
-function updatePlayerPosition(state, keyCode, direction, isPacman){
+function updatePlayerPosition(state, keyCode, direction, isPlayer1){
 
 	// Find the differential in x or y
 	// If player is heading in positive xy directions, set diff to 2, o.w. set diff to -2
@@ -67,13 +67,15 @@ function updatePlayerPosition(state, keyCode, direction, isPacman){
 
 			// Update the player's direction based on the keycode input
 			state = updatePlayerDirection(state, keyCode, direction);
-			if(isPacman){
+			if(isPlayer1){
 				eatDots(state, false, diff)
 
 				// Send keycode input information to server to update positions
 				Socket.p1Moved(state, keyCode, direction);
 			}
 			else{
+
+				// Send keycode input information to server to update positions
 				Socket.p2Moved(state, keyCode, direction)
 			}
 		}
@@ -82,7 +84,7 @@ function updatePlayerPosition(state, keyCode, direction, isPacman){
 		if(moveAllowed(state, 'Y', 'X', direction)){
 			state.Y += diff
 			state = updatePlayerDirection(state, keyCode, direction);
-			if(isPacman){
+			if(isPlayer1){
 				eatDots(state, true, diff)
 				Socket.p1Moved(state, keyCode, direction);
 			}
@@ -197,9 +199,9 @@ function eatDots(state, isVertical, diff){
 	
 	if(key && !key.eaten){
 		key.eaten = true
-		state.noDotsEaten += 1
-		if(state.noDotsEaten == Object.keys(state.dots).length)
-			GamePanel.gameOver('Player1');
+		state.points += 1
+		if(state.points == Object.keys(state.dots).length)
+			Socket.gameOver('Player1');
 	}
 }
 

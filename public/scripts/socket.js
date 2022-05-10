@@ -105,6 +105,10 @@ const Socket = (function() {
         socket.emit('p2 moved', {X: state.X, Y: state.Y, keyCode: keycode, direction: direction})
     }
 
+    const gameOver = function(winner) {
+        socket.emit("gameover", winner);
+    }
+
     // This function disconnects the socket from the server
     const disconnect = function() {
         socket.disconnect();
@@ -125,5 +129,5 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, disconnect, postMessage, userTyping };
+    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, gameOver, disconnect, postMessage, userTyping };
 })();
