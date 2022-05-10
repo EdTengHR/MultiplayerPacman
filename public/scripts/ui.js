@@ -196,12 +196,9 @@ const OnlineUsersPanel = (function() {
 })();
 
 const GamePanel = (function() {
-	// This stores the chat area
     let gamePanel = null;
 
-    // This function initializes the UI
     const initialize = function() {
-		// Set up the chat area
 		gamePanel = $("#game-panel");
 
         gamePanel.html($("#lobby-template").html());
@@ -229,12 +226,15 @@ const GamePanel = (function() {
 		$('#gameId').html(data.gameId)
     }
 
+    const gameOver = function(winner) {
+        Socket.emit("gameover", winner);
+    }
     
     const update = function(data) { 
         
     };
 
-    return { initialize, initGame, update };
+    return { initialize, initGame, gameOver, update };
 })();
 
 const UI = (function() {

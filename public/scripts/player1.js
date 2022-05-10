@@ -1,4 +1,4 @@
-var ghostState;
+var player2State;
 
 initPlayer1Screen = function(canvas){
 	var ctx = initializeCanvas(canvas);
@@ -12,11 +12,11 @@ initPlayer1Screen = function(canvas){
 		noDotsEaten: 0
 	}
 
-	ghostState = {
+	player2State = {
 		X: 340,
 		Y: 220,
 		lastPressedKey: 37,
-		ghostDirection: 'left'
+		p2Direction: 'left'
 	}
 
 	window.addEventListener("keydown", function(e){
@@ -27,7 +27,7 @@ initPlayer1Screen = function(canvas){
 		state = update(state, state.lastPressedKey)
 		clear(ctx);
 		draw(ctx, state);
-		drawGhost(ctx, ghostState);
+		drawP2(ctx, player2State);
 		window.requestAnimationFrame(tick);
 	}
 
@@ -46,42 +46,42 @@ function clear(ctx){
 }
 
 function update(state, keyCode){
-	state = updatePacmanPosition(state, keyCode, config.KEY_DIRECTIONS[keyCode], true)
+	state = updatePlayerPosition(state, keyCode, config.KEY_DIRECTIONS[keyCode], true)
 	return state;
 }
 
-function updatePacmanPosition(state, keyCode, direction, isPacman){
+function updatePlayerPosition(state, keyCode, direction, isPacman){
 	var diff = direction == 'right' || direction == 'down' ? 2 : -2
 	if(direction == 'right' || direction == 'left'){
 		if(moveAllowed(state, 'X', 'Y', direction)){
 			state.X += diff
-			state = updatePacmanDirection(state, keyCode, direction);
+			state = updatePlayerDirection(state, keyCode, direction);
 			if(isPacman){
 				eatDots(state, false, diff)
-				App.Pacman.pacmanMoved(state, keyCode, direction);
+				Socket.p1Moved(state, keyCode, direction);
 			}
 			else{
-				App.Ghost.ghostMoved(state, keyCode, direction)
+				Socket.p2Moved(state, keyCode, direction)
 			}
 		}
 	}
 	else{
 		if(moveAllowed(state, 'Y', 'X', direction)){
 			state.Y += diff
-			state = updatePacmanDirection(state, keyCode, direction);
+			state = updatePlayerDirection(state, keyCode, direction);
 			if(isPacman){
 				eatDots(state, true, diff)
-				App.Pacman.pacmanMoved(state, keyCode, direction);
+				Socket.p1Moved(state, keyCode, direction);
 			}
 			else{
-				App.Ghost.ghostMoved(state, keyCode, direction)
+				Socket.p2Moved(state, keyCode, direction)
 			}
 		}
 	}
 	return state;
 }
 
-function updatePacmanDirection(state, keyCode, direction){
+function updatePlayerDirection(state, keyCode, direction){
 	state.lastPressedKey = keyCode
 	state.direction = direction
 	return state
@@ -250,16 +250,16 @@ function adjustPacman(neighbors, state, position){
 }
 
 function updateGhostInPacmanScreen(data){
-	ghostState.X = data.X
-	ghostState.Y = data.Y
+	player2State.X = data.X
+	player2State.Y = data.Y
 	
 
 	var diff = data.direction == 'right' || data.direction == 'down' ? 2 : -2
 	if(data.direction == 'right' || data.direction == 'left'){
-		ghostState = updatePacmanDirection(ghostState, data.keyCode, data.direction);	
+		player2State = updatePlayerDirection(player2State, data.keyCode, data.direction);	
 	}
 	else{
-		ghostState = updatePacmanDirection(ghostState, data.keyCode, data.direction);
+		player2State = updatePlayerDirection(player2State, data.keyCode, data.direction);
 	}
-	return ghostState;
+	return player2State;
 }

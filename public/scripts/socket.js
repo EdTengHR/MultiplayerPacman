@@ -13,47 +13,57 @@ const Socket = (function() {
 
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
-            // Get the online user list
+            // Get the list of online users 
             socket.emit("get users");
         });
 
-        // Set up the users event
+        // Update users
         socket.on("users", (players) => {
             players = JSON.parse(players);
 
-            // Show the online users
             OnlineUsersPanel.update(players);
         });
 
-        // Set up the add user event
+        // Add a user
         socket.on("add user", (username, user) => {
             user = JSON.parse(user);
             // Add the online user
             OnlineUsersPanel.addUser(username, user);
         });
 
-        // Set up the remove user event
+        // Remove a user
         socket.on("remove user", (user) => {
             user = JSON.parse(user);
 
-            // Remove the online user
             OnlineUsersPanel.removeUser(user);
         });
 
+        // New game created event
         socket.on("new game created", (data) => {
             GamePanel.initGame(data);
         })
 
+        // Player 2 joins the room event
         socket.on("p2 joined room", (data) => {
             $('#waiting').html('Player joined!')
             let canvas = document.getElementById('p1-canvas')
 			initPlayer1Screen(canvas);
         })
 
+        // Set up player 2's canvas
         socket.on("init p2 canvas", (data) => {
             var canvas = document.getElementById('p2-canvas')
             initPlayer2Screen(canvas);
         })
+
+
+
+        // Show the gameover screen and the winner
+        socket.on("show gameover screen", (winner) => {
+            $("#game-panel").html($("#game-over-template").html())
+		    $('#winner').html(winner)
+        })
+
         socket.on('pacmanMoved', pacmanMoved);
     };
 
@@ -72,6 +82,14 @@ const Socket = (function() {
             console.log("emitting p2 joined game")
             socket.emit('p2 joined game', data);
         }
+    }
+
+    const p1Moved = function() {
+
+    }
+
+    const p2Moved = function() {
+        
     }
 
     // This function disconnects the socket from the server
@@ -94,5 +112,5 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, createNewGame, startGame, disconnect, postMessage, userTyping };
+    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, disconnect, postMessage, userTyping };
 })();

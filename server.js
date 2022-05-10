@@ -265,6 +265,10 @@ io.on("connection", (socket) => {
             io.emit("update lives", JSON.stringify(players));
     })
     
+    socket.on("gameover", (winner) => {
+        io.sockets.in(gameId).emit('show gameover screen', winner)
+    })
+
     socket.on("time up", () => {
         // Send player data (including lives + points) to webpage when game is over
         const users = JSON.parse(fs.readFileSync("./data/users.json"));
