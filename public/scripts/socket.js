@@ -155,10 +155,6 @@ const Socket = (function() {
         socket.emit("gameover", winner);
     }
 
-    const restartGame = function() {
-        $("#game-panel").html($("#lobby-template").html());
-    }
-
     // This function disconnects the socket from the server
     const disconnect = function() {
         socket.disconnect();
@@ -179,5 +175,5 @@ const Socket = (function() {
         }
     }
 
-    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, restartGame, disconnect, postMessage, userTyping };
+    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, disconnect, postMessage, userTyping };
 })();
