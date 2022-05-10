@@ -40,6 +40,8 @@ function checkGameOver(player2State, player1State){
 	var yDiff = Math.abs(player2State.Y - player1State.Y)
 	
 	if(xDiff >= 0 && xDiff <= 15 && yDiff >= 0 && yDiff <= 15){
+		// Add game over sound here
+
 		GamePanel.gameOver('Player2');
 	}
 }
@@ -58,11 +60,11 @@ function updateP1PositionInP2Screen(data){
 	
 	var diff = data.direction == 'right' || data.direction == 'down' ? 2 : -2
 	if(data.direction == 'right' || data.direction == 'left'){
-		eatDots(player1State, false, diff)
+		eatDots(player1State, false, diff, false)
 		player1State = updatePlayerDirection(player1State, data.keyCode, data.direction);	
 	}
 	else{
-		eatDots(player1State, true, diff)
+		eatDots(player1State, true, diff, false)
 		player1State = updatePlayerDirection(player1State, data.keyCode, data.direction);
 	}
 	return player1State;

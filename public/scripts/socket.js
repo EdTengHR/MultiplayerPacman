@@ -75,7 +75,7 @@ const Socket = (function() {
 
 
         // Show the gameover screen and the winner
-        socket.on("show gameover screen", (winner) => {
+        socket.on("show gameover screen", (winner, players) => {
             $("#game-panel").html($("#game-over-template").html())
 		    $('#winner').html(winner)
         })
@@ -89,6 +89,12 @@ const Socket = (function() {
         socket.on("update p2", (data) => {
             updateP2InP1Screen(data);
         });
+
+        // Update the scoreboard for all users
+        socket.on("update scores", (players) => {
+            players = JSON.parse(players);
+            OnlineUsersPanel.updateScoreboard(players);
+        })
     };
 
     const createNewGame = function() {
@@ -117,7 +123,7 @@ const Socket = (function() {
     }
 
     const scoredPoint = function(point) {
-        socket.emit("player scores")
+        socket.emit("player scores", point);
     }
 
     const gameOver = function(winner) {

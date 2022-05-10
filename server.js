@@ -211,50 +211,50 @@ io.on("connection", (socket) => {
         socket.broadcast.to(gameId).emit('update p2', data);
     })
 
-    socket.on("player scores", () => {
-        players[newUser.username].points += 1;
-        io.emit("update scores", JSON.stringify(players));
+    socket.on("player scores", (point) => {
+        players[newUser.username].points += point;
+        io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
     })
 
-    socket.on("player loses life", () => {
-        players[newUser.username].lives -= 1;
-        if (players[newUser.username].lives == 0){
-            alivePlayers -= 1;
-            if ((alivePlayers == 1 && numPlayers > 1) || 
-                    (alivePlayers == 0 && numPlayers == 1)){
+    // socket.on("player loses life", () => {
+    //     players[newUser.username].lives -= 1;
+    //     if (players[newUser.username].lives == 0){
+    //         alivePlayers -= 1;
+    //         if ((alivePlayers == 1 && numPlayers > 1) || 
+    //                 (alivePlayers == 0 && numPlayers == 1)){
                 
-                // Send player data (including lives + points) to webpage when game is over
-                const users = JSON.parse(fs.readFileSync("./data/users.json"));
+    //             // Send player data (including lives + points) to webpage when game is over
+    //             const users = JSON.parse(fs.readFileSync("./data/users.json"));
                 
-                if (players[newUser.username].points > users[newUser.username].highscore){
-                    users[newUser.username].highscore = players[newUser.username].points;
-                    fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
-                }
+    //             if (players[newUser.username].points > users[newUser.username].highscore){
+    //                 users[newUser.username].highscore = players[newUser.username].points;
+    //                 fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
+    //             }
 
-                io.emit("game over", JSON.stringify(players));
-            }
-            else
-                socket.emit("player died", JSON.stringify(newUser));
-        }
-        else
-            io.emit("update lives", JSON.stringify(players));
-    })
+    //             io.emit("game over", JSON.stringify(players));
+    //         }
+    //         else
+    //             socket.emit("player died", JSON.stringify(newUser));
+    //     }
+    //     else
+    //         io.emit("update lives", JSON.stringify(players));
+    // })
     
     socket.on("gameover", (winner) => {
-        io.sockets.in(gameId).emit('show gameover screen', winner)
+        io.sockets.in(gameId).emit('show gameover screen', winner, players)
     })
 
-    socket.on("time up", () => {
-        // Send player data (including lives + points) to webpage when game is over
-        const users = JSON.parse(fs.readFileSync("./data/users.json"));
+    // socket.on("time up", () => {
+    //     // Send player data (including lives + points) to webpage when game is over
+    //     const users = JSON.parse(fs.readFileSync("./data/users.json"));
         
-        if (players[newUser.username].points > users[newUser.username].highscore){
-            users[newUser.username].highscore = players[newUser.username].points;
-            fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
-        }
+    //     if (players[newUser.username].points > users[newUser.username].highscore){
+    //         users[newUser.username].highscore = players[newUser.username].points;
+    //         fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
+    //     }
         
-        io.emit("game over", JSON.stringify(players));
-    })
+    //     io.emit("game over", JSON.stringify(players));
+    // })
 })
 
 // Use a web server to listen at port 8000
