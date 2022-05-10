@@ -1,31 +1,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 :root {
     --material-icons-color: black;
     --field-color: gray;
     --field-background: white;
     --field-background-hover: #eee;
     --input-background: #eee;
-    --overlay-background: rgba(245, 158, 114, 0.8);
-    --overlay-caption-color: #eb4a40;
-    --overlay-content-background: linear-gradient(white, #fde0c5);
+    --overlay-background: #18034a;
+    --overlay-caption-color: black;
+    --overlay-content-background: linear-gradient(rgb(190, 190, 255), lightblue);
 
-    --header-background: linear-gradient(to right, #eb4a40, #f59e72);
-    --main-panel-background: linear-gradient(white, #fde0c5);
-    --online-users-panel-background: linear-gradient(to right, #fde0c5, #facba6);
+    --header-background: linear-gradient(#3618f9e6,#0b0476);
+    --main-panel-background: linear-gradient(#0b0476,#0b0476);
+    --online-users-panel-background: linear-gradient(to right, rgb(190, 190, 255), lightblue);
     --game-panel-background: none;
 
-    --title-color: white;
-    --caption-color: white;
+    --title-color: rgb(22, 218, 55);
+    --caption-color: rgb(22, 218, 55);
 
-    --font-color: black;
+    --font-color: rgb(0, 0, 0);
     --date-color: gray;
 
-    --register-form-background: linear-gradient(#fde0c5, #facba6);
+    --register-form-background: linear-gradient(#5940ffa3,#1e14a9);
     --warning-color: red;
 
-    --button-color: white;
-    --button-background: #f2855d;
-    --button-background-hover: #f8b58b;
+    --button-color: black;
+    --button-background: rgb(22, 218, 55);
+    --button-background-hover: rgb(81, 255, 110);
 }
 * {
     font-family: "Abel", sans-serif;
@@ -168,8 +170,8 @@ button.icon:active {
     padding: 0 20px;
 }
 #title {
-    font-family: Abel, sans-serif;
-    font-size: 300%;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 200%;
     text-transform: uppercase;
     color: var(--title-color);
     user-select: none;
@@ -196,25 +198,25 @@ button.icon:active {
     flex-grow: 1;
     align-items: stretch;
     height: 100%;
-    background: var(--game-panel-background);
     padding: 0;
+
 }
 
 #game-canvas{
-	border: 1px solid black;
+	border: 1px solid rgb(0, 0, 0);
 	background-color: #000000;
 }
 
 #chat-area {
     height: 100%;
-    align-items: flex-start;
+    align-items: center;
     justify-content: start;
     gap: 20px;
     overflow-y: auto;
     padding: 10px;
 }
 .chat-message-panel {
-    align-items: flex-start;
+    align-items: center;
     padding: 0;
 }
 .chat-message {
@@ -225,6 +227,10 @@ button.icon:active {
 .chat-date {
     font-size: 75%;
     color: var(--date-color);
+}
+#initial-buttons, #pacman-img{
+    display: flex;
+    justify-content: center;
 }
 
 /* Online users panel */
