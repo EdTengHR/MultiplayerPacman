@@ -241,7 +241,7 @@ io.on("connection", (socket) => {
     // })
     
     socket.on("gameover", (winner) => {
-        io.sockets.in(gameId).emit('show gameover screen', winner)
+        io.sockets.in(gameId).emit('show gameover screen', winner, players)
     })
 
     // socket.on("time up", () => {

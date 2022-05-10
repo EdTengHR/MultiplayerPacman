@@ -75,7 +75,7 @@ const Socket = (function() {
 
 
         // Show the gameover screen and the winner
-        socket.on("show gameover screen", (winner) => {
+        socket.on("show gameover screen", (winner, players) => {
             $("#game-panel").html($("#game-over-template").html())
 		    $('#winner').html(winner)
         })
