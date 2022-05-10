@@ -224,12 +224,16 @@ const GamePanel = (function() {
         gamePanel.html($("#create-game-template").html());
 		$('#gameId').html(data.gameId)
     }
+
+    const restartGame = function() {
+        $("#game-panel").html($("#lobby-template").html());
+    }
     
     const update = function(data) { 
         
     };
 
-    return { initialize, initGame, update };
+    return { initialize, initGame, restartGame, update };
 })();
 
 const UI = (function() {

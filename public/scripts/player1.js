@@ -112,15 +112,18 @@ function draw(ctx, state){
 
 // Draw borders based on the grid lines provided in the game config file
 // This is also where the dot positions in the game are stored
+// Note when debugging: j represents x axis, since i/j are row/column
 function drawBorder(ctx, state){
 	for(var i=0; i<config.GRID.length-1; i++){
 		for(var j=0; j<config.GRID[i].length-1; j++){
 			// If the element to the right is not the same, draw a line to the right
 			if(config.GRID[i][j] != config.GRID[i][j+1]){
+				console.log("i =", i, "j =", j);
 				drawLine(ctx, j*config.BOX_WIDTH, i*config.BOX_WIDTH, true)
 			}
-			// If the element below is not the same, draw a line below it
+			// If the element below is not the same, draw a horizontal line below it
 			if(config.GRID[i][j]!= config.GRID[i+1][j]){
+				console.log("i =", i, "j =", j);
 				drawLine(ctx, j*config.BOX_WIDTH, i*config.BOX_WIDTH, false)
 			}
 			// Store dots co-ordinates
@@ -132,28 +135,30 @@ function drawBorder(ctx, state){
 }
 
 // Helper function to draw lines on canvas, used when drawing the borders
-function drawLine(ctx, xPosition, yPosition, isVertical){
+function drawLine(ctx, x, y, isVertical){
 	ctx.strokeStyle = '#0033ff';
 	ctx.beginPath();
 
 	if(isVertical){
-		ctx.moveTo(xPosition+config.BOX_WIDTH, yPosition);
-		ctx.lineTo(xPosition+config.BOX_WIDTH, yPosition+config.BOX_HEIGHT);	
+		ctx.moveTo(x + config.BOX_WIDTH, y);
+		ctx.lineTo(x + config.BOX_WIDTH, y + config.BOX_HEIGHT);	
 	}
 	else{
-		ctx.moveTo(xPosition, yPosition+config.BOX_HEIGHT);
-		ctx.lineTo(xPosition+config.BOX_WIDTH, yPosition+config.BOX_HEIGHT);
+		ctx.moveTo(x, y + config.BOX_HEIGHT);
+		ctx.lineTo(x + config.BOX_WIDTH, y + config.BOX_HEIGHT);
 	}
 
 	ctx.stroke();
 }
 
-// Helper function to store the postiion of dots in the game
+// Helper function to store the position of dots in the game
 function storeDotPosition(state, i, j){
 	dotX = (j*config.BOX_WIDTH) + config.BOX_WIDTH/2
 	dotY = (i*config.BOX_WIDTH) + config.BOX_WIDTH/2
 	if(!state.dots[dotX + " " + dotY]){
-		state.dots[dotX + " " + dotY] = {'x': dotX, 'y': dotY, 'eaten': false}
+		// Don't store a dot at the starting position for player 1
+		if (!(i == 1 && j == 1))
+			state.dots[dotX + " " + dotY] = {'x': dotX, 'y': dotY, 'eaten': false}
 	}
 }
 
@@ -200,6 +205,8 @@ function eatDots(state, isVertical, diff){
 	if(key && !key.eaten){
 		key.eaten = true
 		state.points += 1
+		pointValue = 1;
+		Socket.scoredPoint(pointValue);
 		if(state.points == Object.keys(state.dots).length)
 			Socket.gameOver('Player1');
 	}
