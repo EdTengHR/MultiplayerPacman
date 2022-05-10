@@ -135,8 +135,9 @@ function drawBorder(ctx, state){
 }
 
 // Helper function to draw lines on canvas, used when drawing the borders
-function drawLine(ctx, x, y, isVertical){
-	ctx.strokeStyle = '#0033ff';
+function drawLine(ctx, xPosition, yPosition, isVertical){
+	//ctx.strokeStyle = '#0033ff';
+	ctx.strokeStyle='#F08080';
 	ctx.beginPath();
 
 	if(isVertical){
@@ -165,7 +166,7 @@ function storeDotPosition(state, i, j){
 function drawDots(ctx, state){
 	for(key in state.dots){
 		if(!state.dots[key].eaten){
-			ctx.fillStyle = '#FFFFFF';
+			ctx.fillStyle = '#FFFFFE';
 			ctx.fillRect(state.dots[key].x, state.dots[key].y,5,5);	
 		}		
 	}

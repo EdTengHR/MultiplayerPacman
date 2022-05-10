@@ -222,7 +222,11 @@ const GamePanel = (function() {
 
     const initGame = function(data) {
         gamePanel.html($("#create-game-template").html());
-		$('#gameId').html(data.gameId)
+        p = document.createElement("p");
+        p.style.color = 'rgb(22, 218, 55)';
+        p.style.fontSize = 'large';
+        p.innerHTML = 'Game ID: '+data.gameId;
+		$('#gameId').html(p);
     }
 
     const restartGame = function() {

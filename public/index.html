@@ -117,27 +117,33 @@
         </div>
 
         <div class="col-md-8 col-md-offset-5" id="pacman-img">
-            <img src="./pacman-png-25186.png" class="img-responsive">
+            <img src="./pacman-png-25186.png" class="img-responsive" width="150" height="150">
         </div>
     </script>
 
     <script id="create-game-template" type="text/template">
         <div class="col">
             <div>
-                Game id: <span id="gameId"></span>
+                <span id="gameId"><p id="gameIDp">Game id: </p></span>
                 <p id="waiting"> Waiting for player2... </p>
             </div>
-            <canvas id="p1-canvas" width="400px" height="400px"></canvas>
+            <canvas id="p1-canvas"></canvas>
         </div>
     </script>
 
     <script id="join-game-template" type="text/template">
         <div id="p2-game-panel">
-            <p>Enter Game id:</p>
-            <input type="text" id="inputGameId">
-            <input type="button" value="Start" id="btnStartGame" onclick="Socket.startGame()">
-            <span id="hostPlayer"></span>
-            <canvas id="p2-canvas" class="canvas" width="400px" height="400px"></canvas>
+            <div id="p2-button-text">
+                <p id="p2-button-text-p">Enter Game id: </p>
+            </div>
+            <div id="p2-buttons">
+                <input type="text" id="inputGameId">
+                <input type="button" value="Start" id="btnStartGame" onclick="Socket.startGame()">
+            </div>
+            <div id ="hostPlayerDiv">
+                <span id="hostPlayer"></span>
+            </div>
+            <canvas id="p2-canvas" class="canvas"></canvas>
         </div>
     </script>
 
