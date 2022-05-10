@@ -1,7 +1,7 @@
 const Socket = (function() {
     // This stores the current Socket.IO socket
     let socket = null;
-    let gameId = 0;
+    let playerId = 0;
 
     // This function gets the socket from the module
     const getSocket = function() {
@@ -46,6 +46,9 @@ const Socket = (function() {
 
         // Player 2 joins the room event
         socket.on("p2 joined room", (newPlayer) => {
+            // Identify current player as player 1
+            playerId = 1;
+
             p = document.createElement("p");
             p.style.color = 'rgb(22, 218, 55)';
             p.style.fontSize = 'large';
@@ -59,6 +62,9 @@ const Socket = (function() {
 
         // Set up player 2's canvas
         socket.on("init p2 canvas", (host) => {
+            // Identify current player as player 2
+            playerId = 2;
+
             p = document.createElement("p");
             p.style.color = 'rgb(22, 218, 55)';
             p.style.fontSize = 'large';
@@ -74,9 +80,26 @@ const Socket = (function() {
         })
 
         // Show the gameover screen and the winner
-        socket.on("show gameover screen", (winner, players) => {
+        socket.on("show gameover screen", (data, players) => {
+            console.log(Authentication.getUser());
+            // Cancel game animation frames for both players
+            if (playerId == 1){
+                stopP1Animation();
+            }
+            if (playerId == 2){
+                stopP2Animation();
+            }
+
+            if (Authentication.getUser().username != data.winner){
+                socket.emit("loser leaves room")
+            }
+
+            // Add in game over template panel over
             $("#game-panel").html($("#game-over-template").html())
-		    $('#winner').html(winner)
+		    $('#winner').html(data.winner)
+
+            // Populate statistics section in game panel page
+
         })
 
         // P2 needs to update p1's position on p2's canvas
@@ -133,7 +156,6 @@ const Socket = (function() {
     }
 
     const restartGame = function() {
-        socket.leave(gameId);
         $("#game-panel").html($("#lobby-template").html());
     }
 

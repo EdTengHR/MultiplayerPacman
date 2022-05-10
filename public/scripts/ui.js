@@ -245,7 +245,7 @@ const GamePanel = (function() {
 		$('#gameId').html(p);
 
     }
-
+    
     return { initialize, initGame };
 })();
 

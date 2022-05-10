@@ -1,4 +1,5 @@
 var player1State;
+let p2AnimationId;
 
 initPlayer2Screen = function(canvas){
 	var ctx = initializeCanvas(canvas);
@@ -28,10 +29,10 @@ initPlayer2Screen = function(canvas){
 		clear(ctx);
 		draw(ctx, player1State);
 		drawP2(ctx, player2State);
-		window.requestAnimationFrame(tickPlayer2Screen);
+		p2AnimationId = window.requestAnimationFrame(tickPlayer2Screen);
 	}
 
-	window.requestAnimationFrame(tickPlayer2Screen);
+	p2AnimationId = window.requestAnimationFrame(tickPlayer2Screen);
 	
 }
  
@@ -79,4 +80,9 @@ function drawP2(ctx, player2State){
 	// Draw player 2 here
 	ctx.arc(player2State.X, player2State.Y, 20, 0, 2*Math.PI, false);
 	ctx.fill();
+}
+
+function stopP2Animation(){
+	console.log("Stop p2 animation called")
+	window.cancelAnimationFrame(p2AnimationId);
 }

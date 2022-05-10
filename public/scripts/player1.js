@@ -1,4 +1,5 @@
 var player2State;
+let p1AnimationId;
 
 initPlayer1Screen = function(canvas){
 	var ctx = initializeCanvas(canvas);
@@ -28,10 +29,10 @@ initPlayer1Screen = function(canvas){
 		clear(ctx);
 		draw(ctx, state);
 		drawP2(ctx, player2State);
-		window.requestAnimationFrame(tick);
+		p1AnimationId = window.requestAnimationFrame(tick);
 	}
 
-	window.requestAnimationFrame(tick);
+	p1AnimationId = window.requestAnimationFrame(tick);
 	
 }
 
@@ -308,4 +309,8 @@ function updateP2InP1Screen(data){
 		player2State = updatePlayerDirection(player2State, data.keyCode, data.direction);
 	}
 	return player2State;
+}
+
+function stopP1Animation(){
+	window.cancelAnimationFrame(p1AnimationId);
 }

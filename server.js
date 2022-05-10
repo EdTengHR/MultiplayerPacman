@@ -241,7 +241,25 @@ io.on("connection", (socket) => {
     // })
     
     socket.on("gameover", (winner) => {
-        io.sockets.in(gameId).emit('show gameover screen', winner, players)
+        // Caller is the one who called the gameover (the player id that won)
+        // Winner represents the actual username of the player that won
+        let data = {
+            winner: newUser.username,
+            caller: winner
+        }
+
+        // this has to be here so that the winner actually receives the broadcast to show gameover screen
+        io.sockets.in(gameId).emit('show gameover screen', data, players)
+
+        // Winner leaves the socket room
+        socket.leave(gameId)
+        console.log(`winner ${newUser.username} left room`)
+    })
+
+    socket.on("loser leaves room", () => {
+        socket.leave(gameId)
+        console.log(`loser ${newUser.username} left room`)
+        console.log(socket.adapter.rooms);
     })
 
     // socket.on("time up", () => {
