@@ -109,6 +109,8 @@ const Socket = (function() {
             let data = {
                 gameId: $('#inputGameId').val(),
             }
+            let mySound = new Audio('./sound/start-sound.wav');
+            mySound.play();
             console.log("emitting p2 joined game", data)
             socket.emit('p2 joined game', data);
         }

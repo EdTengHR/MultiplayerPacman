@@ -41,7 +41,8 @@ function checkGameOver(player2State, player1State){
 	
 	if(xDiff >= 0 && xDiff <= 15 && yDiff >= 0 && yDiff <= 15){
 		// Add game over sound here
-
+		let mySound = new Audio('./sound/endgame-sound.wav');
+		mySound.play();
 		GamePanel.gameOver('Player2');
 	}
 }

@@ -246,6 +246,7 @@ const GamePanel = (function() {
         p.style.fontSize = 'large';
         p.innerHTML = 'Game ID: '+data.gameId;
 		$('#gameId').html(p);
+
     }
 
     const restartGame = function(data) {
