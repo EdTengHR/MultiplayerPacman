@@ -267,6 +267,12 @@ button.icon:active {
     color:rgb(22, 218, 55);
     font-size: large;
 }
+#restart-game-btn{
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(22, 218, 55); 
+    margin: 10px;
+}
 /* Online users panel */
 #online-users-panel {
 	flex: 0 0 250px;

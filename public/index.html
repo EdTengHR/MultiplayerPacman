@@ -11,7 +11,6 @@
     <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> -->
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/socket.js"></script>
-    <script src="scripts/avatar.js"></script>
     <script src="scripts/ui.js"></script>
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
@@ -54,6 +53,12 @@
                     <span>Highscore</span>
                 </div>
                 <div id="online-users-area" class="col"></div>
+                <button id = "restart-game-btn">Restart Game</button>
+                <script>
+                    $("#restart-game-btn").on('click', () => {
+                    $("#game-panel").html($("#lobby-template").html());
+                });
+                </script>
             </div>
         </div>
     </div>
@@ -77,9 +82,6 @@
                 <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
                 <div class="spacer-0"></div>
                 <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-                <select id="register-avatar">
-                    <option value="">Select your avatar</option>
-                </select>
                 <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
                 <input id="register-password" type="password" placeholder="Enter your password"></input>
                 <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
