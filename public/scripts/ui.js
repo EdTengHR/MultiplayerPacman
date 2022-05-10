@@ -158,6 +158,25 @@ const OnlineUsersPanel = (function() {
         console.log("online user panel updated")
     };
 
+    // Update the scoreboard for the online users
+    const updateScoreboard = function(players) {
+        let currUser = null;
+        // Loop through the online users area and update each user's points
+        $("#online-users-area").children().each(function() {
+            $(this).children().each(function(){
+                $(this).children().each(function(index){
+                  if (index == 0){
+                      currUser = $(this).text();
+                  }
+                  if (index == 2) {
+                      $(this).text(players[currUser].points);
+                      return false;     // break out of each loop
+                  }
+                });
+            });
+        })
+    }
+
     // This function adds a user in the panel
 	const addUser = function(username, user) {
         const onlineUsersArea = $("#online-users-area");
@@ -192,7 +211,7 @@ const OnlineUsersPanel = (function() {
         }
 	};
 
-    return { initialize, update, addUser, removeUser };
+    return { initialize, update, updateScoreboard, addUser, removeUser };
 })();
 
 const GamePanel = (function() {

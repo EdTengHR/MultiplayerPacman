@@ -68,7 +68,7 @@ function updatePlayerPosition(state, keyCode, direction, isPlayer1){
 			// Update the player's direction based on the keycode input
 			state = updatePlayerDirection(state, keyCode, direction);
 			if(isPlayer1){
-				eatDots(state, false, diff)
+				eatDots(state, false, diff, isPlayer1)
 
 				// Send keycode input information to server to update positions
 				Socket.p1Moved(state, keyCode, direction);
@@ -85,7 +85,7 @@ function updatePlayerPosition(state, keyCode, direction, isPlayer1){
 			state.Y += diff
 			state = updatePlayerDirection(state, keyCode, direction);
 			if(isPlayer1){
-				eatDots(state, true, diff)
+				eatDots(state, true, diff, isPlayer1)
 				Socket.p1Moved(state, keyCode, direction);
 			}
 			else{
@@ -135,9 +135,9 @@ function drawBorder(ctx, state){
 }
 
 // Helper function to draw lines on canvas, used when drawing the borders
-function drawLine(ctx, xPosition, yPosition, isVertical){
+function drawLine(ctx, x, y, isVertical){
 	//ctx.strokeStyle = '#0033ff';
-	ctx.strokeStyle='#F08080';
+	ctx.strokeStyle='#22A1F9';
 	ctx.beginPath();
 
 	if(isVertical){
@@ -193,7 +193,7 @@ function drawPacman(ctx, state){
 	ctx.fill();
 }
 
-function eatDots(state, isVertical, diff){
+function eatDots(state, isVertical, diff, isPlayer1){
 	if(isVertical){
 		dotY = state.Y + (diff * 4)
 		key = state.dots[state.X + " " + dotY]
@@ -207,9 +207,17 @@ function eatDots(state, isVertical, diff){
 		key.eaten = true
 		state.points += 1
 		pointValue = 1;
-		Socket.scoredPoint(pointValue);
-		if(state.points == Object.keys(state.dots).length)
+
+		// Add game sound for scoring point here
+
+		if (isPlayer1)
+			Socket.scoredPoint(pointValue);
+		
+		if(state.points == Object.keys(state.dots).length){
+			// Add game over sound here
+
 			Socket.gameOver('Player1');
+		}
 	}
 }
 
