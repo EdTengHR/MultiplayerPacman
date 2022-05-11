@@ -214,8 +214,10 @@ io.on("connection", (socket) => {
     })
 
     socket.on("player scores", (point) => {
-        players[newUser.username].points += point;
-        io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
+        if (newUser != undefined){
+            players[newUser.username].points += point;
+            io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
+        }
     })
 
     // socket.on("player loses life", () => {
