@@ -212,7 +212,7 @@ button.icon:active {
 #p2-canvas, #p1-canvas{
     background-color: #000000;
     width: 760px;
-    height: 440px;
+    height: 600px;
 }
 #game-canvas{
 	border: 1px solid rgb(0, 0, 0);
