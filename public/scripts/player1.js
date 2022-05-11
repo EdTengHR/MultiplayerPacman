@@ -185,6 +185,7 @@ function drawDots(ctx, state){
 
 // draw player 1 - the pacman
 function drawPacman(ctx, state){
+
 	ctx.beginPath();
 	ctx.fillStyle = "#f2f000"
 	ctx.strokeStyle="#000000"
@@ -200,9 +201,10 @@ function drawPacman(ctx, state){
 	
 	// eyes
 	ctx.beginPath();
-	ctx.fillStyle = "#000000"
+	ctx.fillStyle = "black"
 	ctx.arc(state.X + config.PACMAN[state.direction].dEyesX, state.Y + config.PACMAN[state.direction].dEyesY, 2, 0, Math.PI * 2, false)
 	ctx.fill();
+
 }
 
 function eatDots(state, isVertical, diff, isPlayer1){

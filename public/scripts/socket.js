@@ -117,7 +117,7 @@ const Socket = (function() {
                 myInfoHScore.push(players[player].highscore);
                 myInfoScore.push(players[player].points)
             }
-            if(myInfoScore[0]>=myInfoScore[1]){//change to myInfoScore once implemented
+            if(myInfoHScore[0]>=myInfoHScore[1]){//change to myInfoScore once implemented
                 p1name = myInfoName[0];
                 p1points = myInfoScore[0];
                 p1hScore = myInfoHScore[0];

@@ -92,13 +92,48 @@ function updateP1StateForP2(data){
 // Draw player 2
 function drawP2(ctx, player2State){
 	//ctx.fillStyle = '#D0342B'
-	ctx.fillStyle = '#FF0000'
+	//ctx.fillStyle = '#FF0000'
 	
-	let radius = config.PACMAN.radius
+//	let radius = config.PACMAN.radius
 
 	// Draw player 2 here
-	ctx.arc(player2State.X, player2State.Y, radius, 0, 2 * Math.PI, false);
-	ctx.fill();
+//	ctx.arc(player2State.X, player2State.Y, radius, 0, 2 * Math.PI, false);
+//	ctx.fill();
+
+this.x = player2State.X - 20;
+ this.y = player2State.Y + 10;
+ 
+ ctx.beginPath();
+ ctx.strokeStyle="black";
+ ctx.lineWidth="1";
+ ctx.fillStyle="white";
+ ctx.beginPath(); 
+ ctx.moveTo(this.x, this.y);
+ ctx.quadraticCurveTo(this.x + 19, this.y - 65, this.x + 40, this.y);
+ ctx.moveTo(this.x, this.y);
+ ctx.quadraticCurveTo(this.x + 3, this.y + 10, this.x + 10, this.y);
+ ctx.moveTo(this.x + 10, this.y);
+ ctx.quadraticCurveTo(this.x + 12, this.y +10, this.x + 20, this.y);
+ ctx.moveTo(this.x + 20, this.y);
+ ctx.quadraticCurveTo(this.x + 22, this.y + 10, this.x + 30, this.y);
+ ctx.moveTo(this.x + 30, this.y);
+ ctx.quadraticCurveTo(this.x + 35, this.y +10, this.x + 40, this.y);
+ ctx.strokeStyle = 'black';
+ ctx.stroke();
+ ctx.fill();
+ ctx.closePath();
+ ctx.fillStyle = "black";
+ ctx.beginPath();
+ ctx.arc(this.x + 14, this.y - 20, 2, 0, Math.PI * 8, true);
+ ctx.strokeStyle = 'black';
+ ctx.stroke();
+ ctx.fill();
+ ctx.beginPath();
+ ctx.arc(this.x + 25, this.y - 20, 2, 0, Math.PI * 8, true);
+ ctx.strokeStyle = 'black';
+ ctx.stroke();
+ ctx.fill();
+
 }
 
 function stopP2Animation(){
