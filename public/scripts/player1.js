@@ -90,6 +90,7 @@ function updatePlayerPosition(state, keyCode, direction, isPlayer1){
 		}
 	}
 	else{
+		// Basically same as above but for Y axis
 		if (moveAllowed(state, 'Y', 'X', direction)){
 			state.Y += diff
 			state = updatePlayerDirection(state, keyCode, direction);
@@ -125,15 +126,14 @@ function draw(ctx, state){
 function drawBorder(ctx, state){
 	for (var i = 0; i < config.GRID.length - 1; i++){
 		for (var j = 0; j < config.GRID[i].length - 1; j++){
+
 			// If the element to the right is not the same, draw a line to the right
 			if (config.GRID[i][j] != config.GRID[i][j + 1]){
-				console.log("i =", i, "j =", j);
 				drawLine(ctx, j * config.BOX_WIDTH, i * config.BOX_WIDTH, true)
 			}
 
 			// If the element below is not the same, draw a horizontal line below it
 			if (config.GRID[i][j] != config.GRID[i + 1][j]){
-				console.log("i =", i, "j =", j);
 				drawLine(ctx, j * config.BOX_WIDTH, i * config.BOX_WIDTH, false)
 			}
 
@@ -147,7 +147,6 @@ function drawBorder(ctx, state){
 
 // Helper function to draw lines on canvas, used when drawing the borders
 function drawLine(ctx, x, y, isVertical){
-	//ctx.strokeStyle = '#0033ff';
 	ctx.strokeStyle='#22A1F9';
 	ctx.beginPath();
 
@@ -167,6 +166,7 @@ function drawLine(ctx, x, y, isVertical){
 function storeDotPosition(state, i, j){
 	dotX = (j * config.BOX_WIDTH) + config.BOX_WIDTH/  2
 	dotY = (i * config.BOX_WIDTH) + config.BOX_WIDTH / 2
+
 	if (!state.dots[dotX + " " + dotY]){
 		// Don't store a dot at the starting position for player 1
 		if (!(i == 1 && j == 1))
@@ -183,13 +183,14 @@ function drawDots(ctx, state){
 	}
 }
 
+// draw player 1 - the pacman
 function drawPacman(ctx, state){
 	ctx.beginPath();
 	ctx.fillStyle = "#f2f000"
 	ctx.strokeStyle="#000000"
 
 	// Arc of pacman
-	ctx.arc(state.X, state.Y, config.PACMAN.radius, config.PACMAN[state.direction].startAngle, config.PACMAN[state.direction].endAngle, false	)
+	ctx.arc(state.X, state.Y, config.PACMAN.radius, config.PACMAN[state.direction].startAngle, config.PACMAN[state.direction].endAngle, false)
 	
 	// Mouth
 	ctx.lineTo(state.X + config.PACMAN[state.direction].dMouthX, state.Y+ config.PACMAN[state.direction].dMouthY)
@@ -200,7 +201,7 @@ function drawPacman(ctx, state){
 	// eyes
 	ctx.beginPath();
 	ctx.fillStyle = "#000000"
-	ctx.arc(state.X + config.PACMAN[state.direction].dEyesX,	state.Y + config.PACMAN[state.direction].dEyesY, 2, 0, Math.PI*2, false)
+	ctx.arc(state.X + config.PACMAN[state.direction].dEyesX, state.Y + config.PACMAN[state.direction].dEyesY, 2, 0, Math.PI * 2, false)
 	ctx.fill();
 }
 
@@ -245,7 +246,7 @@ function moveAllowed(state, wallPosition, adjustPosition, direction){
 	if (!checkWall(neighbors, state[wallPosition], neighbors.diff, state.phase))
 		return false
 	
-	// Adjust player
+	// Adjust player so that it doesn't appear to phase through the wall
 	adjustPlayer(neighbors, state, adjustPosition)
 	return true
 }
@@ -323,26 +324,34 @@ function checkWall(neighbors, position, diff, phase){
 	return true
 }
 
+// Adjust the player's current position based on its neighbors
 function adjustPlayer(neighbors, state, position){
+	// The distance used is each player's radius, since the radius is half the box's width
+	let dist = config.PACMAN.radius;
+
+	// Basic error checking - no error then enter if
 	if((neighbors.currentBlock != neighbors.diagonal1 || neighbors.currentBlock != neighbors.diagonal2)){
 		diff = state[position] % config.BOX_WIDTH
-		if(diff < 20 || diff > 20)
-			state[position] = (state[position] - (state[position] % config.BOX_WIDTH)) + 20
+		
+		if(diff < dist || diff > dist){
+			// Change the x or y value of the player according to the offset (sort of accounts for potential lag)
+			state[position] = state[position] - diff + dist
+		}
 	}
 }
 
-function updateP2InP1Screen(data){
+// Update player 2's state for player 1
+function updatePlayer2ForPlayer1(data){
 	player2State.X = data.X
 	player2State.Y = data.Y
 	
-	// diff stored for f
-	var diff = data.direction == 'right' || data.direction == 'down' ? 2 : -2
 	if(data.direction == 'right' || data.direction == 'left'){
 		player2State = updatePlayerDirection(player2State, data.keyCode, data.direction);	
 	}
 	else{
 		player2State = updatePlayerDirection(player2State, data.keyCode, data.direction);
 	}
+
 	return player2State;
 }
 

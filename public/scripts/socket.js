@@ -112,7 +112,7 @@ const Socket = (function() {
 
         // P1 needs to update p2's position on p1's canvas
         socket.on("update p2", (data) => {
-            updateP2InP1Screen(data);
+            updatePlayer2ForPlayer1(data);
         });
 
         // Update the scoreboard for all users
