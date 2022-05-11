@@ -161,13 +161,16 @@ const OnlineUsersPanel = (function() {
         $("#online-users-area").children().each(function() {
             $(this).children().each(function(){
                 $(this).children().each(function(index){
-                  if (index == 0){
-                      currUser = $(this).text();
-                  }
-                  if (index == 2) {
-                      $(this).text(players[currUser].points);
-                      return false;     // break out of each loop
-                  }
+                    if (index == 0){
+                        currUser = $(this).text();
+                    }
+                    if (index == 2) {
+                        $(this).text(players[currUser].points);
+                    }
+                    if (index == 6) {
+                        $(this).text(players[currUser].highscore);
+                        return false;     // break out of each loop
+                    }
                 });
             });
         })
@@ -254,7 +257,19 @@ const GamePanel = (function() {
         else if (playerId == 2){
             gameId = $("#p2-gameId").text().substring(9);
             Socket.restart(gameId);
-        }        
+        }
+
+        let currUser = null;
+        $("#online-users-area").children().each(function() {
+            $(this).children().each(function(){
+                $(this).children().each(function(index){
+                    if (index == 2) {
+                        $(this).text("0");
+                        return false;     // break out of each loop
+                    }
+                });
+            });
+        })
         
         GamePanel.initialize();
     }
