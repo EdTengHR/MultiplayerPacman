@@ -9,14 +9,16 @@ initPlayer2Screen = function(canvas){
 		Y: 60,
 		lastPressedKey: 37,
 		direction: 'left',
-		dots: []
+		dots: [],
+		phase: false
 	}
 
 	player2State = {
 		X: 340,
 		Y: 220,
 		lastPressedKey: 39,
-		direction: 'right'
+		direction: 'right',
+		phase: false
 	}
 
 	window.addEventListener("keydown", function(e){
@@ -47,7 +49,14 @@ function checkGameOver(player2State, player1State){
 		Socket.gameOver('Player2');
 	}
 }
+
 function updatePlayer2(player2State, keyCode){
+	// If key pressed was space bar (activating / deactivating cheat mode)
+	if (keyCode == 32){
+		player2State.phase = !player2State.phase;
+		console.log("cheat mode:", player2State.phase);
+		keyCode = player2State.lastPressedKey;		// reassigning keycode to the last pressed key so player keeps moving
+	}
 	player2State = updatePlayerPosition(player2State, keyCode, config.KEY_DIRECTIONS[keyCode], false)
 	return player2State;
 }
@@ -59,6 +68,7 @@ function updatePlayer1ForPlayer2(data){
 function updateP1PositionInP2Screen(data){
 	player1State.X = data.X
 	player1State.Y = data.Y
+	player1State.phase = data.phase
 	
 	var diff = data.direction == 'right' || data.direction == 'down' ? 2 : -2
 	if(data.direction == 'right' || data.direction == 'left'){
@@ -78,7 +88,7 @@ function drawP2(ctx, player2State){
 	
 
 	// Draw player 2 here
-	ctx.arc(player2State.X, player2State.Y, 20, 0, 2*Math.PI, false);
+	ctx.arc(player2State.X, player2State.Y, 20, 0, 2 * Math.PI, false);
 	ctx.fill();
 }
 

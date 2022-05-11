@@ -140,11 +140,11 @@ const Socket = (function() {
     }
 
     const p1Moved = function(state, keycode, direction) {
-        socket.emit("p1 moved", {X: state.X, Y: state.Y, keyCode: keycode, direction: direction})
+        socket.emit("p1 moved", {X: state.X, Y: state.Y, phase: state.phase, keyCode: keycode, direction: direction})
     }
 
     const p2Moved = function(state, keycode, direction) {
-        socket.emit('p2 moved', {X: state.X, Y: state.Y, keyCode: keycode, direction: direction})
+        socket.emit('p2 moved', {X: state.X, Y: state.Y, phase: state.phase, keyCode: keycode, direction: direction})
     }
 
     const scoredPoint = function(point) {
@@ -161,19 +161,5 @@ const Socket = (function() {
         socket = null;
     };
 
-    // This function sends a post message event to the server
-    const postMessage = function(content) {
-        if (socket && socket.connected) {
-            socket.emit("post message", content);
-        }
-    };
-
-    // This function sends a 'typing' event to the server
-    const userTyping = function() {
-        if (socket && socket.connected) {
-            socket.emit("user typing");
-        }
-    }
-
-    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, disconnect, postMessage, userTyping };
+    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, disconnect };
 })();
