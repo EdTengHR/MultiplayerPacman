@@ -267,10 +267,15 @@ io.on("connection", (socket) => {
     })
 
     socket.on("leave room", (gameId) => {
-        console.log(socket.adapter.rooms)
+        console.log(players)
+        players[newUser.username].points = 0;
+        console.log(players)
+
+        // Update scores in the game room BEFORE leaving it
+        io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
         socket.leave(gameId);
         console.log(`Game restarted, so ${newUser.username} left room`)
-        console.log(socket.adapter.rooms)
+        
     })
 
     // socket.on("time up", () => {
