@@ -84,8 +84,6 @@ app.post("/signin", (req, res) => {
         return;
     }
     let highscore = users[username].highscore;
-    let lives = 3;
-    let points = 0;
     //
     // G. Sending a success response with the user account
     //
@@ -232,7 +230,7 @@ io.on("connection", (socket) => {
                 
     //             if (players[newUser.username].points > users[newUser.username].highscore){
     //                 users[newUser.username].highscore = players[newUser.username].points;
-    //                 fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
+    //                 fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
     //             }
 
     //             io.emit("game over", JSON.stringify(players));
@@ -251,6 +249,25 @@ io.on("connection", (socket) => {
             winner: newUser.username,
             caller: winner
         }
+
+        const users = JSON.parse(fs.readFileSync("./data/users.json"));
+
+        let usersJsonChanged = false;
+
+        for (const username in players){
+            if (players[username].points > players[username].highscore){
+                users[username].highscore = players[username].points;
+                players[username].highscore = players[username].points;
+                usersJsonChanged = true;
+            }
+        }
+
+        if (usersJsonChanged){
+            fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
+        }
+
+        // Update the scoreboard
+        io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
 
         // this has to be here so that the winner actually receives the broadcast to show gameover screen
         io.sockets.in(gameId).emit('show gameover screen', data, players)
@@ -284,7 +301,7 @@ io.on("connection", (socket) => {
         
     //     if (players[newUser.username].points > users[newUser.username].highscore){
     //         users[newUser.username].highscore = players[newUser.username].points;
-    //         fs.writeFileSync("./data/users.json", JSON.stringify(msgs, null, " "));
+    //         fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
     //     }
         
     //     io.emit("game over", JSON.stringify(players));
