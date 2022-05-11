@@ -36,7 +36,6 @@ const SignInForm = (function() {
 
             // Get the input fields
             const username = $("#register-username").val().trim();
-            const name     = $("#register-name").val().trim();
             const password = $("#register-password").val().trim();
             const confirmPassword = $("#register-confirm").val().trim();
 
@@ -47,7 +46,7 @@ const SignInForm = (function() {
             }
 
             // Send a register request
-            Registration.register(username, name, password,
+            Registration.register(username, password,
                 () => {
                     $("#register-form").get(0).reset();
                     $("#register-message").text("You can sign in now.");
