@@ -105,8 +105,24 @@ const Socket = (function() {
             p.style.color = 'rgb(22, 218, 55)';
             p.style.fontSize = 'large';
             p.innerHTML = data.winner +" wins!";
+            p.style.textAlign = "center"
 		    $('#winner').html(p)
             // Populate statistics section in game panel page
+
+            let p1, p2;
+            const playerArr = Object.entries(players).map((e) => ( { [e[0]]: e[1] } ));
+            console.log(playerArr);
+            p1 = playerArr[0];
+            p2 = playerArr[1];
+            console.log(p1);
+            console.log(p2);
+            console.log(p1.keys());
+            console.log(p2.values());
+
+            $('#player1-name').html(p1);
+            $('#player2-name').html(p2);
+            $('#player1-score').html(p1.highscore);
+            $('#player2-score').html(p2.highscore);
 
         })
 
