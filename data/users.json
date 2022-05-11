@@ -6,5 +6,9 @@
  "may": {
   "password": "$2b$10$gLc3Ri9W6P650EKKbexw6uvirV8Bar7gmvAtMcoMiPiR3rsY50GVu",
   "highscore": 0
+ },
+ "asdf": {
+  "password": "$2b$10$QJCWqj5niHQcDzfQ5uRvQOrh.GVkG7979mTFF0RlvFlj6KJkka3SO",
+  "highscore": 0
  }
 }
