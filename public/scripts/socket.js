@@ -103,21 +103,34 @@ const Socket = (function() {
             p.style.textAlign = "center"
 		    $('#winner').html(p)
             // Populate statistics section in game panel page
-
-            let p1, p2;
-            const playerArr = Object.entries(players).map((e) => ( { [e[0]]: e[1] } ));
-            console.log(playerArr);
-            p1 = playerArr[0];
-            p2 = playerArr[1];
-            console.log(p1);
-            console.log(p2);
-            console.log(p1.keys());
-            console.log(p2.values());
-
-            $('#player1-name').html(p1);
-            $('#player2-name').html(p2);
-            $('#player1-score').html(p1.highscore);
-            $('#player2-score').html(p2.highscore);
+            let p1name,p1points,p1hScore,p2name,p2points,p2hScore;
+            let myInfoName = [];
+            let myInfoHScore = [];
+            let myInfoScore = [];
+            for(player in players){
+                myInfoName.push(player);
+                myInfoHScore.push(players[player].highscore);
+                myInfoScore.push(players[player].points)
+            }
+            if(myInfoScore[0]>=myInfoScore[1]){//change to myInfoScore once implemented
+                p1name = myInfoName[0];
+                p1points = myInfoScore[0];
+                p1hScore = myInfoHScore[0];
+                p2name = myInfoName[1];
+                p2points = myInfoScore[1];
+                p2hScore = myInfoHScore[1];
+            }else{
+                p2name = myInfoName[0];
+                p2points = myInfoScore[0];
+                p2hScore = myInfoHScore[0];
+                p1name = myInfoName[1];
+                p1points = myInfoScore[1];
+                p1hScore = myInfoHScore[1];
+            }
+            $('#player1-name').html(p1name);
+            $('#player2-name').html(p2name);
+            $('#player1-score').html(p1points);
+            $('#player2-score').html(p2points);
 
         })
 

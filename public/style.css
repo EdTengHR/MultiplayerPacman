@@ -276,8 +276,13 @@ button.icon:active {
 
 #gameover-para{
     font-family: 'Press Start 2P', cursive;
+    font-size: large;
     color:rgb(22, 218, 55);
     font-size: medium;
+}
+th,td, #scoreboard-head{
+    color: pink;
+    text-align: center;
 }
 /* Online users panel */
 #online-users-panel {
