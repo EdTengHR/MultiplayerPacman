@@ -273,6 +273,12 @@ button.icon:active {
     border: 2px solid rgb(22, 218, 55); 
     margin: 10px;
 }
+
+#gameover-para{
+    font-family: 'Press Start 2P', cursive;
+    color:rgb(22, 218, 55);
+    font-size: medium;
+}
 /* Online users panel */
 #online-users-panel {
 	flex: 0 0 250px;

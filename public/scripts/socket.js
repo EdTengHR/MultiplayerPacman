@@ -96,8 +96,11 @@ const Socket = (function() {
 
             // Add in game over template panel over
             $("#game-panel").html($("#game-over-template").html())
-		    $('#winner').html(data.winner)
-
+            p = document.createElement("p");
+            p.style.color = 'rgb(22, 218, 55)';
+            p.style.fontSize = 'large';
+            p.innerHTML = data.winner +" wins!";
+		    $('#winner').html(p)
             // Populate statistics section in game panel page
 
         })

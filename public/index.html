@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>The Chatroom</title>
+    <title>Multiplayer Pacman</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,9 +154,15 @@
     </script>
 
     <script id="game-over-template" type="text/template">
-        <div class="game-over"> GAME OVER!! </div>
-        <div><span id="winner"></span> wins!</div>
-        <div class = "scores">
+        <div class="game-over"> 
+            <p id = 'gameover-para'>
+            GAME OVER!! 
+            </p> 
+        </div>
+        <div><span id="winner"></span> 
+        </div>
+        <div class = "scoreboard">
+            <h1>Score Board</h1>
             <p id="player1-score"></p>
             <p id="player2-score"></p>
         </div>
