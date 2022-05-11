@@ -132,10 +132,12 @@ const Socket = (function() {
                 p1points = myInfoScore[1];
                 p1hScore = myInfoHScore[1];
             }
+            console.log(myInfoHScore);
+            console.log(p1name, p2name, p1hScore, p2hScore);
             $('#player1-name').html(p1name);
             $('#player2-name').html(p2name);
-            $('#player1-score').html(p1points);
-            $('#player2-score').html(p2points);
+            $('#player1-score').html(p1hScore);
+            $('#player2-score').html(p2hScore);
 
         })
 

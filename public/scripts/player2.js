@@ -14,8 +14,8 @@ initPlayer2Screen = function(canvas){
 	}
 
 	player2State = {
-		X: 700,
-		Y: 540,
+		X: 340,
+		Y: 220,
 		lastPressedKey: 39,
 		direction: 'right',
 		phase: false
@@ -109,27 +109,27 @@ this.x = player2State.X - 20;
  ctx.fillStyle="white";
  ctx.beginPath(); 
  ctx.moveTo(this.x, this.y);
- ctx.quadraticCurveTo(this.x + 19, this.y - 65, this.x + 40, this.y);
+ ctx.quadraticCurveTo(this.x + 22, this.y - 60, this.x + 35, this.y);
  ctx.moveTo(this.x, this.y);
- ctx.quadraticCurveTo(this.x + 3, this.y + 10, this.x + 10, this.y);
+ ctx.quadraticCurveTo(this.x + 5, this.y + 8, this.x + 8, this.y);
  ctx.moveTo(this.x + 10, this.y);
- ctx.quadraticCurveTo(this.x + 12, this.y +10, this.x + 20, this.y);
+ ctx.quadraticCurveTo(this.x + 15, this.y +4, this.x + 16, this.y);
  ctx.moveTo(this.x + 20, this.y);
- ctx.quadraticCurveTo(this.x + 22, this.y + 10, this.x + 30, this.y);
+ ctx.quadraticCurveTo(this.x + 25, this.y + 8, this.x + 25, this.y);
  ctx.moveTo(this.x + 30, this.y);
- ctx.quadraticCurveTo(this.x + 35, this.y +10, this.x + 40, this.y);
+ ctx.quadraticCurveTo(this.x + 35, this.y +4, this.x + 35, this.y);
  ctx.strokeStyle = 'black';
  ctx.stroke();
  ctx.fill();
  ctx.closePath();
  ctx.fillStyle = "black";
  ctx.beginPath();
- ctx.arc(this.x + 14, this.y - 20, 2, 0, Math.PI * 8, true);
+ ctx.arc(this.x + 14, this.y - 15, 2, 0, Math.PI * 8, true);
  ctx.strokeStyle = 'black';
  ctx.stroke();
  ctx.fill();
  ctx.beginPath();
- ctx.arc(this.x + 25, this.y - 20, 2, 0, Math.PI * 8, true);
+ ctx.arc(this.x + 25, this.y - 15, 2, 0, Math.PI * 8, true);
  ctx.strokeStyle = 'black';
  ctx.stroke();
  ctx.fill();
