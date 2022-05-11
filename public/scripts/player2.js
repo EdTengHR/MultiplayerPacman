@@ -14,8 +14,8 @@ initPlayer2Screen = function(canvas){
 	}
 
 	player2State = {
-		X: 340,
-		Y: 220,
+		X: 700,
+		Y: 540,
 		lastPressedKey: 39,
 		direction: 'right',
 		phase: false

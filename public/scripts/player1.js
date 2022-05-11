@@ -15,8 +15,8 @@ initPlayer1Screen = function(canvas){
 	}
 
 	player2State = {
-		X: 340,
-		Y: 220,
+		X: 700,
+		Y: 540,
 		lastPressedKey: 37,
 		p2Direction: 'left',
 		phase: false
@@ -285,7 +285,6 @@ function getNeighbors(state, direction){
 
 	if (direction == 'right' || direction == 'left'){
 		if (xIndex + neighbors.diff == 0 || xIndex + neighbors.diff == config.GRID[yIndex].length - 1){
-			console.log("Next neighbor is a border wall along x axis");
 			neighbors.atBorder = true;
 		}
 		else {
@@ -295,7 +294,6 @@ function getNeighbors(state, direction){
 	}
 	else {
 		if (yIndex + neighbors.diff == 0 || yIndex + neighbors.diff == config.GRID.length - 1){
-			console.log("Next neighbor is a border wall along y axis");
 			neighbors.atBorder = true;
 		}
 		else {

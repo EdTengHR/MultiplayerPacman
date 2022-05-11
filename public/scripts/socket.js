@@ -47,11 +47,7 @@ const Socket = (function() {
 
         // Player 2 joins the room event
         socket.on("p2 joined room", (newPlayer) => {
-            p = document.createElement("p");
-            p.style.color = 'rgb(22, 218, 55)';
-            p.style.fontSize = 'large';
-            p.innerHTML = `Player 2 ${newPlayer} joined!`;
-            $('#waiting').html(p)
+            GamePanel.p2JoinsRoom(newPlayer);
 
             // Assign player1's specific canvas and initialize it
             let canvas = document.getElementById('p1-canvas')
@@ -63,30 +59,15 @@ const Socket = (function() {
             // Identify current player as player 2
             playerId = 2;
 
-            p = document.createElement("p");
-            p.style.color = 'rgb(22, 218, 55)';
-            p.style.fontSize = 'large';
-            p.innerHTML = `You have joined ${data.host}'s game!`;
-            $('#hostPlayer').html(p);
+            GamePanel.initP2Canvas(data);
 
-            p2 = document.createElement("p");
-            p2.style.color = 'rgb(22, 218, 55)';
-            p2.style.fontSize = 'large';
-            p2.innerHTML = `Game id: ${data.gameId}`;
-            $('#p2-gameId').html(p2);
-
-            var x = document.getElementById("p2-button-text-p");
-            x.style.display = 'none';
-            var y = document.getElementById("p2-buttons");
-            y.style.display = 'none';
-            // Assign player2's specific canvas and intiailize it
+            // Assign player2's specific canvas and intialize it
             var canvas = document.getElementById('p2-canvas')
             initPlayer2Screen(canvas);
         })
 
         // Show the gameover screen and the winner
         socket.on("show gameover screen", (data, players) => {
-            console.log(Authentication.getUser());
             // Cancel game animation frames for both players
             if (playerId == 1){
                 stopP1Animation();
@@ -99,46 +80,7 @@ const Socket = (function() {
                 socket.emit("loser leaves room")
             }
 
-            // Add in game over template panel over
-            $("#game-panel").html($("#game-over-template").html())
-            p = document.createElement("p");
-            p.style.color = 'rgb(22, 218, 55)';
-            p.style.fontSize = 'large';
-            p.innerHTML = data.winner +" wins!";
-            p.style.textAlign = "center"
-		    $('#winner').html(p)
-            // Populate statistics section in game panel page
-            let p1name,p1points,p1hScore,p2name,p2points,p2hScore;
-            let myInfoName = [];
-            let myInfoHScore = [];
-            let myInfoScore = [];
-            for(player in players){
-                myInfoName.push(player);
-                myInfoHScore.push(players[player].highscore);
-                myInfoScore.push(players[player].points)
-            }
-            if(myInfoHScore[0]>=myInfoHScore[1]){//change to myInfoScore once implemented
-                p1name = myInfoName[0];
-                p1points = myInfoScore[0];
-                p1hScore = myInfoHScore[0];
-                p2name = myInfoName[1];
-                p2points = myInfoScore[1];
-                p2hScore = myInfoHScore[1];
-            }else{
-                p2name = myInfoName[0];
-                p2points = myInfoScore[0];
-                p2hScore = myInfoHScore[0];
-                p1name = myInfoName[1];
-                p1points = myInfoScore[1];
-                p1hScore = myInfoHScore[1];
-            }
-            console.log(myInfoHScore);
-            console.log(p1name, p2name, p1hScore, p2hScore);
-            $('#player1-name').html(p1name);
-            $('#player2-name').html(p2name);
-            $('#player1-score').html(p1hScore);
-            $('#player2-score').html(p2hScore);
-
+            GamePanel.gameOver(data, players);
         })
 
         // P2 needs to update p1's position on p2's canvas
@@ -160,7 +102,6 @@ const Socket = (function() {
 
     const createNewGame = function() {
         if (socket && socket.connected) {
-            console.log("emitting create game")
             socket.emit("create game");
         }
     }
@@ -173,7 +114,6 @@ const Socket = (function() {
             }
             let mySound = new Audio('./sound/start-sound.wav');
             mySound.play();
-            console.log("emitting p2 joined game", data)
             socket.emit('p2 joined game', data);
         }
     }

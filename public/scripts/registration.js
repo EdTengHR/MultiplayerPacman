@@ -7,10 +7,6 @@ const Registration = (function() {
     // * `onError`   - This is a callback function to be called when the
     //                 request fails in this form `onError(error)`
     const register = function(username, password, onSuccess, onError) {
-
-        //
-        // A. Preparing the user data
-        //
         const data = {
             username: username,
             password: password

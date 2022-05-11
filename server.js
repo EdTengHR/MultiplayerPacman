@@ -130,13 +130,12 @@ const players = {};
 let numPlayers = 0;     // This value is edited later on when p2 joins a room
 let alivePlayers = 0;
 let gameId = 0;
-let host = null;
+let host = null;        // host is player 1
 
 io.on("connection", (socket) => {
     const newUser = socket.request.session.user
     if (newUser != undefined){ 
         players[newUser.username] = {
-            lives: 1,
             points: 0,
             highscore: newUser.highscore,
         }
@@ -145,7 +144,6 @@ io.on("connection", (socket) => {
         console.log("New connection")
         console.log("Online users: ", players);
         io.emit("add user", newUser.username, JSON.stringify(players[newUser.username]));
-        console.log("user added from server's io on connect");
     }
 
     socket.on("disconnect", () => {
@@ -171,7 +169,6 @@ io.on("connection", (socket) => {
         }
         host = newUser.username
         socket.emit("new game created", data);
-        console.log("Emitted create new game with data:", data)
         socket.join(GameId.toString());
         console.log("Game created with id:" + GameId);
     })
@@ -180,7 +177,6 @@ io.on("connection", (socket) => {
     socket.on("p2 joined game", (data) => {
         let room = socket.adapter.rooms.get(data.gameId);
 
-        console.log(data);
         console.log("Player 2: ", newUser.username, " has joined the game!")
 
         if(room != undefined){
@@ -219,30 +215,6 @@ io.on("connection", (socket) => {
             io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
         }
     })
-
-    // socket.on("player loses life", () => {
-    //     players[newUser.username].lives -= 1;
-    //     if (players[newUser.username].lives == 0){
-    //         alivePlayers -= 1;
-    //         if ((alivePlayers == 1 && numPlayers > 1) || 
-    //                 (alivePlayers == 0 && numPlayers == 1)){
-                
-    //             // Send player data (including lives + points) to webpage when game is over
-    //             const users = JSON.parse(fs.readFileSync("./data/users.json"));
-                
-    //             if (players[newUser.username].points > users[newUser.username].highscore){
-    //                 users[newUser.username].highscore = players[newUser.username].points;
-    //                 fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
-    //             }
-
-    //             io.emit("game over", JSON.stringify(players));
-    //         }
-    //         else
-    //             socket.emit("player died", JSON.stringify(newUser));
-    //     }
-    //     else
-    //         io.emit("update lives", JSON.stringify(players));
-    // })
     
     socket.on("gameover", (winner) => {
         // Caller is the one who called the gameover (the player id that won)
@@ -282,13 +254,10 @@ io.on("connection", (socket) => {
     socket.on("loser leaves room", () => {
         socket.leave(gameId)
         console.log(`loser ${newUser.username} left room`)
-        console.log(socket.adapter.rooms);
     })
 
     socket.on("leave room", (gameId) => {
-        console.log(players)
         players[newUser.username].points = 0;
-        console.log(players)
 
         // Update scores in the game room BEFORE leaving it
         io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
@@ -296,18 +265,6 @@ io.on("connection", (socket) => {
         console.log(`Game restarted, so ${newUser.username} left room`)
         
     })
-
-    // socket.on("time up", () => {
-    //     // Send player data (including lives + points) to webpage when game is over
-    //     const users = JSON.parse(fs.readFileSync("./data/users.json"));
-        
-    //     if (players[newUser.username].points > users[newUser.username].highscore){
-    //         users[newUser.username].highscore = players[newUser.username].points;
-    //         fs.writeFileSync("./data/users.json", JSON.stringify(users, null, " "));
-    //     }
-        
-    //     io.emit("game over", JSON.stringify(players));
-    // })
 })
 
 // Use a web server to listen at port 8000

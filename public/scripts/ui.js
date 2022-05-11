@@ -247,6 +247,33 @@ const GamePanel = (function() {
 		$('#gameId').html(p);
     }
 
+    const initP2Canvas = function(data) {
+        p = document.createElement("p");
+        p.style.color = 'rgb(22, 218, 55)';
+        p.style.fontSize = 'large';
+        p.innerHTML = `You have joined ${data.host}'s game!`;
+        $('#hostPlayer').html(p);
+
+        p2 = document.createElement("p");
+        p2.style.color = 'rgb(22, 218, 55)';
+        p2.style.fontSize = 'large';
+        p2.innerHTML = `Game id: ${data.gameId}`;
+        $('#p2-gameId').html(p2);
+
+        var x = document.getElementById("p2-button-text-p");
+        x.style.display = 'none';
+        var y = document.getElementById("p2-buttons");
+        y.style.display = 'none';
+    }
+
+    const p2JoinsRoom = function(newPlayer) {
+        p = document.createElement("p");
+        p.style.color = 'rgb(22, 218, 55)';
+        p.style.fontSize = 'large';
+        p.innerHTML = `Player 2 ${newPlayer} joined!`;
+        $('#waiting').html(p)
+    }
+
     const restartGame = function(playerId) {
         let gameId;
         if (playerId == 1){
@@ -272,8 +299,54 @@ const GamePanel = (function() {
         
         GamePanel.initialize();
     }
+
+    const gameOver = function(data, players) {
+        // Add in game over template panel over
+        $("#game-panel").html($("#game-over-template").html())
+        p = document.createElement("p");
+        p.style.color = 'rgb(22, 218, 55)';
+        p.style.fontSize = 'large';
+        p.innerHTML = data.winner +" wins!";
+        p.style.textAlign = "center"
+        $('#winner').html(p)
+
+        // Populate statistics section in game panel page
+        let p1name,p1points,p1hScore,p2name,p2points,p2hScore;
+        let myInfoName = [];
+        let myInfoHScore = [];
+        let myInfoScore = [];
+
+        for(player in players){
+            myInfoName.push(player);
+            myInfoHScore.push(players[player].highscore);
+            myInfoScore.push(players[player].points)
+        }
+
+        if(myInfoHScore[0]>=myInfoHScore[1]){//change to myInfoScore once implemented
+            p1name = myInfoName[0];
+            p1points = myInfoScore[0];
+            p1hScore = myInfoHScore[0];
+            p2name = myInfoName[1];
+            p2points = myInfoScore[1];
+            p2hScore = myInfoHScore[1];
+        }else{
+            p2name = myInfoName[0];
+            p2points = myInfoScore[0];
+            p2hScore = myInfoHScore[0];
+            p1name = myInfoName[1];
+            p1points = myInfoScore[1];
+            p1hScore = myInfoHScore[1];
+        }
+
+        console.log(myInfoHScore);
+        console.log(p1name, p2name, p1hScore, p2hScore);
+        $('#player1-name').html(p1name);
+        $('#player2-name').html(p2name);
+        $('#player1-score').html(p1hScore);
+        $('#player2-score').html(p2hScore);
+    }
     
-    return { initialize, initGame, restartGame };
+    return { initialize, initGame, initP2Canvas, p2JoinsRoom, restartGame, gameOver };
 })();
 
 const UI = (function() {
@@ -284,8 +357,6 @@ const UI = (function() {
             .append($("<span class='user-username'>" + username + "</span>"))
             .append($("<div class='spacer-2'>" + "</div>"))
             .append($("<span class='user-points'>" + user.points + "</span>"))
-            .append($("<div class='spacer-3'>" + "</div>"))
-            .append($("<span class='user-lives'>" + user.lives + "</span>"))
             .append($("<div class='spacer-4'>" + "</div>"))
             .append($("<span class='user-highscore'>" + user.highscore + "</span>"));         
     };
