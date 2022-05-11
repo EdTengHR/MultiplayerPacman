@@ -241,12 +241,25 @@ const GamePanel = (function() {
         p = document.createElement("p");
         p.style.color = 'rgb(22, 218, 55)';
         p.style.fontSize = 'large';
-        p.innerHTML = 'Game ID: '+data.gameId;
+        p.innerHTML = 'Game ID: '+ data.gameId;
 		$('#gameId').html(p);
+    }
 
+    const restartGame = function(playerId) {
+        let gameId;
+        if (playerId == 1){
+            gameId = $("#gameId").first().text().substring(9);
+            Socket.restart(gameId);
+        }
+        else if (playerId == 2){
+            gameId = $("#p2-gameId").text().substring(9);
+            Socket.restart(gameId);
+        }        
+        
+        GamePanel.initialize();
     }
     
-    return { initialize, initGame };
+    return { initialize, initGame, restartGame };
 })();
 
 const UI = (function() {

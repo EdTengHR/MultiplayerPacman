@@ -53,7 +53,7 @@
                     <span>Highscore</span>
                 </div>
                 <div id="online-users-area" class="col"></div>
-                <button id = "restart-game-btn" onclick="GamePanel.initialize()">Restart Game</button>
+                <button id = "restart-game-btn" onclick="Socket.restartGame()">Restart Game</button>
             </div>
         </div>
     </div>
@@ -148,6 +148,7 @@
             </div>
             <div id ="hostPlayerDiv">
                 <span id="hostPlayer"></span>
+                <span id="p2-gameId">Game id: </span>
             </div>
             <canvas id="p2-canvas" class="canvas"></canvas>
         </div>
