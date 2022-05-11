@@ -197,7 +197,11 @@ io.on("connection", (socket) => {
                 gameId = data.gameId;
 
                 // Broadcast for player 2 to initialize canvas
-                socket.emit('init p2 canvas', host)
+                let info = {
+                    host: host,
+                    gameId: gameId
+                }
+                socket.emit('init p2 canvas', (info))
             }
         }
     })
@@ -260,6 +264,18 @@ io.on("connection", (socket) => {
         socket.leave(gameId)
         console.log(`loser ${newUser.username} left room`)
         console.log(socket.adapter.rooms);
+    })
+
+    socket.on("leave room", (gameId) => {
+        console.log(players)
+        players[newUser.username].points = 0;
+        console.log(players)
+
+        // Update scores in the game room BEFORE leaving it
+        io.sockets.in(gameId).emit('update scores', JSON.stringify(players))
+        socket.leave(gameId);
+        console.log(`Game restarted, so ${newUser.username} left room`)
+        
     })
 
     // socket.on("time up", () => {

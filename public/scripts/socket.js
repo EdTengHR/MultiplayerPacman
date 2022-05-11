@@ -41,14 +41,12 @@ const Socket = (function() {
 
         // New game created event
         socket.on("new game created", (data) => {
+            playerId = 1;
             GamePanel.initGame(data);
         })
 
         // Player 2 joins the room event
         socket.on("p2 joined room", (newPlayer) => {
-            // Identify current player as player 1
-            playerId = 1;
-
             p = document.createElement("p");
             p.style.color = 'rgb(22, 218, 55)';
             p.style.fontSize = 'large';
@@ -61,15 +59,22 @@ const Socket = (function() {
         })
 
         // Set up player 2's canvas
-        socket.on("init p2 canvas", (host) => {
+        socket.on("init p2 canvas", (data) => {
             // Identify current player as player 2
             playerId = 2;
 
             p = document.createElement("p");
             p.style.color = 'rgb(22, 218, 55)';
             p.style.fontSize = 'large';
-            p.innerHTML = `You have joined ${host}'s game!`;
+            p.innerHTML = `You have joined ${data.host}'s game!`;
             $('#hostPlayer').html(p);
+
+            p2 = document.createElement("p");
+            p2.style.color = 'rgb(22, 218, 55)';
+            p2.style.fontSize = 'large';
+            p2.innerHTML = `Game id: ${data.gameId}`;
+            $('#p2-gameId').html(p2);
+
             var x = document.getElementById("p2-button-text-p");
             x.style.display = 'none';
             var y = document.getElementById("p2-buttons");
@@ -193,5 +198,15 @@ const Socket = (function() {
         socket = null;
     };
 
-    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, disconnect };
+    const restartGame = function() {
+        GamePanel.restartGame(playerId);
+    }
+
+    const restart = function(gameId) {
+        // Reset the player's id
+        playerId = 0;
+        socket.emit("leave room", (gameId));
+    }
+
+    return { getSocket, connect, createNewGame, startGame, p1Moved, p2Moved, scoredPoint, gameOver, disconnect, restartGame, restart };
 })();
