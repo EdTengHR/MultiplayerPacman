@@ -106,7 +106,7 @@ this.x = player2State.X - 20;
  ctx.beginPath();
  ctx.strokeStyle="black";
  ctx.lineWidth="1";
- ctx.fillStyle="white";
+ ctx.fillStyle="#FF0000";
  ctx.beginPath(); 
  ctx.moveTo(this.x, this.y);
  ctx.quadraticCurveTo(this.x + 22, this.y - 60, this.x + 35, this.y);

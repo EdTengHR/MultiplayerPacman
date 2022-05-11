@@ -67,7 +67,7 @@ body {
 .spacer-4 { width: 20px; height: 20px; }
 .spacer-grow { flex-grow: 1; }
 
-/* Overlay */
+
 .overlay {
     position: fixed;
     left: 0; top: 0;
@@ -86,7 +86,6 @@ body {
     color: var(--warning-color);
 }
 
-/* Form related */
 form input, form select {
     width: 100%;
 }
@@ -137,7 +136,7 @@ button.icon:active {
     margin: 2px -2px -2px 2px;
 }
 
-/* Data field caption and content */
+
 .field-content {
     border-radius: 50px;
     padding: 10px 15px;
@@ -154,7 +153,6 @@ button.icon:active {
     white-space: nowrap;
 }
 
-/* Top level container */
 #container {
     align-items: stretch;
     gap: 0px;
@@ -163,7 +161,6 @@ button.icon:active {
     padding: 0;
 }
 
-/* Header */
 #header {
     height: 80px;
     background: var(--header-background);
@@ -195,13 +192,11 @@ button.icon:active {
     text-align: center;
 }
 
-/* Main panel */
 #main-panel {
     height: calc(100% - 40px);
     background: var(--main-panel-background);
 }
 
-/* Game area */
 #game-panel {
     flex-grow: 1;
     align-items: center;
@@ -219,27 +214,6 @@ button.icon:active {
 	background-color: #000000;
 }
 
-#chat-area {
-    height: 100%;
-    align-items: center;
-    justify-content: start;
-    gap: 20px;
-    overflow-y: auto;
-    padding: 10px;
-}
-.chat-message-panel {
-    align-items: center;
-    padding: 0;
-}
-.chat-message {
-    align-items: start;
-    gap: 5px;
-    padding: 0;
-}
-.chat-date {
-    font-size: 75%;
-    color: var(--date-color);
-}
 #initial-buttons{
     display: flex;
     justify-content: center;
@@ -284,7 +258,6 @@ th,td, #scoreboard-head{
     color: pink;
     text-align: center;
 }
-/* Online users panel */
 #online-users-panel {
 	flex: 0 0 250px;
     height: 100%;
@@ -299,7 +272,6 @@ th,td, #scoreboard-head{
     overflow-y: auto;
 }
 
-/* Signin overlay */
 #signin-form {
     width: 270px;
     align-self: stretch;
@@ -310,7 +282,7 @@ th,td, #scoreboard-head{
     padding: 20px;
 }
 
-/* Edit user overlay */
+
 #edit-user-form {
     width: 270px;
     align-self: stretch;
